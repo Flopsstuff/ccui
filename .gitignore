@@ -133,3 +133,6 @@ tasks/
 
 # ignore gitpmoji directory
 .gitpmoji
+
+# Cloudflare tunnel credentials
+cloudflared/credentials.json

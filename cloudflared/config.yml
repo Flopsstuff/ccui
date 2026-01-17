@@ -1,0 +1,7 @@
+tunnel: a13b9088-4cd6-4062-bc08-d774768f9a9d
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: ccui.aimost.pl
+    service: http://claude-code-ui:3001
+  - service: http_status:404

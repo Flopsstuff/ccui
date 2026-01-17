@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   claude-code-ui:
     build: .
@@ -45,6 +43,16 @@ services:
     # volumes:
     #   - ~/.aws:/root/.aws:ro
 
+    restart: unless-stopped
+
+  # Cloudflare Tunnel for external access
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro
+    depends_on:
+      - claude-code-ui
     restart: unless-stopped
 
 volumes:
