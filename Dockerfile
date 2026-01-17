@@ -44,7 +44,7 @@ COPY . .
 RUN npm run build
 
 # Create directories for sessions and projects
-RUN mkdir -p /root/.claude/projects /projects
+RUN mkdir -p /root/.claude/projects /root/.cursor /root/.codex /projects
 
 # Expose port
 EXPOSE 3001

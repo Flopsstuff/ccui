@@ -7,6 +7,12 @@ services:
       # Claude sessions (persistent)
       - claude-sessions:/root/.claude
 
+      # Cursor sessions (persistent)
+      - cursor-sessions:/root/.cursor
+
+      # Codex sessions (persistent)
+      - codex-sessions:/root/.codex
+
       # Projects (all projects inside container)
       - projects-data:/projects
     environment:
@@ -57,4 +63,6 @@ services:
 
 volumes:
   claude-sessions:
+  cursor-sessions:
+  codex-sessions:
   projects-data:
