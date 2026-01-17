@@ -541,7 +541,7 @@ async function getProjects() {
       projects.push(project);
     }
   }
-  
+
   return projects;
 }
 

@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  claude-code-ui:
+    build: .
+    ports:
+      - "3001:3001"
+    volumes:
+      # Claude sessions (persistent)
+      - claude-sessions:/root/.claude
+
+      # Projects (all projects inside container)
+      - projects-data:/projects
+    environment:
+      # Server
+      - PORT=${PORT:-3001}
+      - NODE_ENV=production
+
+      # Restrict project creation to /projects only
+      - WORKSPACES_ROOT=/projects
+
+      # Claude CLI
+      - CLAUDE_CLI_PATH=${CLAUDE_CLI_PATH:-/usr/local/bin/claude}
+
+      # Database
+      - DATABASE_PATH=${DATABASE_PATH}
+      - CONTEXT_WINDOW=${CONTEXT_WINDOW:-160000}
+
+      # AWS Bedrock
+      - CLAUDE_CODE_USE_BEDROCK=${CLAUDE_CODE_USE_BEDROCK:-1}
+      - AWS_REGION=${AWS_REGION:-eu-central-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # Or use profile (mount ~/.aws)
+      # - AWS_PROFILE=${AWS_PROFILE:-default}
+
+      # Anthropic Models
+      - ANTHROPIC_DEFAULT_SONNET_MODEL=${ANTHROPIC_DEFAULT_SONNET_MODEL:-eu.anthropic.claude-sonnet-4-5-20250929-v1:0}
+      - ANTHROPIC_DEFAULT_OPUS_MODEL=${ANTHROPIC_DEFAULT_OPUS_MODEL:-eu.anthropic.claude-opus-4-5-20251101-v1:0}
+      - ANTHROPIC_DEFAULT_HAIKU_MODEL=${ANTHROPIC_DEFAULT_HAIKU_MODEL:-eu.anthropic.claude-haiku-4-5-20251001-v1:0}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-eu.anthropic.claude-sonnet-4-5-20250929-v1:0}
+      - ANTHROPIC_SMALL_FAST_MODEL=${ANTHROPIC_SMALL_FAST_MODEL:-eu.anthropic.claude-haiku-4-5-20251001-v1:0}
+
+    # Optional: mount AWS credentials from host
+    # volumes:
+    #   - ~/.aws:/root/.aws:ro
+
+    restart: unless-stopped
+
+volumes:
+  claude-sessions:
+  projects-data:
