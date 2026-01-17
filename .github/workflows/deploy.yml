@@ -28,8 +28,8 @@ jobs:
       - name: Stop existing containers
         run: docker compose down --remove-orphans || true
 
-      - name: Pull and start containers
-        run: docker compose up -d --build
+      - name: Build and start containers
+        run: docker compose up -d --build --no-cache
 
       - name: Cleanup old images
         run: docker image prune -f || true
