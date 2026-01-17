@@ -43,7 +43,7 @@ const LoginForm = () => {
             </div>
             <h1 className="text-2xl font-bold text-foreground">Welcome Back</h1>
             <p className="text-muted-foreground mt-2">
-              Sign in to your Claude Code UI account
+              Sign in to your AI Code UI account
             </p>
           </div>
 
@@ -98,7 +98,7 @@ const LoginForm = () => {
 
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Enter your credentials to access Claude Code UI
+              Enter your credentials to access AI Code UI
             </p>
           </div>
         </div>

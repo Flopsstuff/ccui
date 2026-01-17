@@ -238,7 +238,7 @@ function MainContent({
                 }} 
               />
             </div>
-            <h2 className="text-xl font-semibold mb-2">Loading Claude Code UI</h2>
+            <h2 className="text-xl font-semibold mb-2">Loading AI Code UI</h2>
             <p>Setting up your workspace...</p>
           </div>
         </div>
