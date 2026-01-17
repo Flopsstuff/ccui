@@ -2216,10 +2216,130 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
         }
         break;
 
+      case 'commit':
+        // Commit and push changes
+        if (data.error) {
+          setChatMessages(prev => [...prev, {
+            role: 'assistant',
+            content: `⚠️ ${data.message}`,
+            timestamp: Date.now()
+          }]);
+        } else {
+          // Execute commit and push workflow
+          (async () => {
+            try {
+              // Get git status first
+              const statusResponse = await authenticatedFetch(`/api/git/status?project=${encodeURIComponent(selectedProject?.name)}`);
+              const status = await statusResponse.json();
+
+              if (status.error) {
+                setChatMessages(prev => [...prev, {
+                  role: 'assistant',
+                  content: `⚠️ Git error: ${status.error}`,
+                  timestamp: Date.now()
+                }]);
+                return;
+              }
+
+              // Collect all changed files
+              const allFiles = [
+                ...status.modified || [],
+                ...status.added || [],
+                ...status.deleted || [],
+                ...status.untracked || []
+              ];
+
+              if (allFiles.length === 0) {
+                setChatMessages(prev => [...prev, {
+                  role: 'assistant',
+                  content: '✓ No changes to commit. Working tree is clean.',
+                  timestamp: Date.now()
+                }]);
+                return;
+              }
+
+              // Use provided message or generate one
+              let commitMessage = data.commitMessage;
+              if (!commitMessage) {
+                // Generate commit message based on changed files
+                const types = [];
+                if ((status.added?.length || 0) + (status.untracked?.length || 0) > 0) types.push('add');
+                if (status.modified?.length > 0) types.push('update');
+                if (status.deleted?.length > 0) types.push('remove');
+                commitMessage = `${types.join('/')} files: ${allFiles.slice(0, 3).join(', ')}${allFiles.length > 3 ? ` (+${allFiles.length - 3} more)` : ''}`;
+              }
+
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `Committing ${allFiles.length} file(s)...`,
+                timestamp: Date.now()
+              }]);
+
+              // Stage and commit
+              const commitResponse = await authenticatedFetch('/api/git/commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  project: selectedProject?.name,
+                  message: commitMessage,
+                  files: allFiles
+                })
+              });
+              const commitResult = await commitResponse.json();
+
+              if (commitResult.error || !commitResult.success) {
+                setChatMessages(prev => [...prev, {
+                  role: 'assistant',
+                  content: `⚠️ Commit failed: ${commitResult.error || 'Unknown error'}`,
+                  timestamp: Date.now()
+                }]);
+                return;
+              }
+
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `✓ Committed: "${commitMessage}"\n\nPushing to remote...`,
+                timestamp: Date.now()
+              }]);
+
+              // Push to remote
+              const pushResponse = await authenticatedFetch('/api/git/push', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ project: selectedProject?.name })
+              });
+              const pushResult = await pushResponse.json();
+
+              if (pushResult.error || !pushResult.success) {
+                setChatMessages(prev => [...prev, {
+                  role: 'assistant',
+                  content: `⚠️ Push failed: ${pushResult.error || pushResult.details || 'Unknown error'}\n\nCommit was successful but not pushed.`,
+                  timestamp: Date.now()
+                }]);
+                return;
+              }
+
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `✓ Pushed to ${pushResult.remoteName}/${pushResult.remoteBranch}\n\nCommit and push completed successfully!`,
+                timestamp: Date.now()
+              }]);
+
+            } catch (error) {
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `⚠️ Error: ${error.message}`,
+                timestamp: Date.now()
+              }]);
+            }
+          })();
+        }
+        break;
+
       default:
         console.warn('Unknown built-in command action:', action);
     }
-  }, [onFileOpen, onShowSettings]);
+  }, [onFileOpen, onShowSettings, selectedProject]);
 
   // Ref to store handleSubmit so we can call it from handleCustomCommand
   const handleSubmitRef = useRef(null);
