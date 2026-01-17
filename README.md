@@ -41,14 +41,16 @@ A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/cla
 
 ## Features
 
-- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile so you can also use Claude Code, Cursor, or Codex from mobile 
+- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile so you can also use Claude Code, Cursor, or Codex from mobile
 - **Interactive Chat Interface** - Built-in chat interface for seamless communication with Claude Code, Cursor, or Codex
 - **Integrated Shell Terminal** - Direct access to Claude Code, Cursor CLI, or Codex through built-in shell functionality
 - **File Explorer** - Interactive file tree with syntax highlighting and live editing
-- **Git Explorer** - View, stage and commit your changes. You can also switch branches 
+- **Git Explorer** - View, stage and commit your changes. You can also switch branches
 - **Session Management** - Resume conversations, manage multiple sessions, and track history
 - **TaskMaster AI Integration** *(Optional)* - Advanced project management with AI-powered task planning, PRD parsing, and workflow automation
-- **Model Compatibility** - Works with Claude Sonnet 4.5, Opus 4.5, and GPT-5.2 
+- **Model Compatibility** - Works with Claude Sonnet 4.5, Opus 4.5, and GPT-5.2
+- **AWS Bedrock Support** - Use Claude via AWS Bedrock without Anthropic API keys
+- **Cloudflare Tunnel** - Secure remote access without exposing ports 
 
 
 ## Quick Start
@@ -182,6 +184,53 @@ The application will start at the port you specified in your .env
 5. **Open your browser:**
    - Development: `http://localhost:3001`
 
+### Docker Installation
+
+For production deployment or isolated environment, use Docker:
+
+**📖 Full Docker Guide:** See [DOCKER.md](DOCKER.md) for comprehensive Docker setup instructions.
+
+**Quick Docker Start:**
+
+```bash
+# 1. Configure environment
+cp .env.example .env
+# Edit .env with AWS credentials or other settings
+
+# 2. Build and start
+docker-compose up -d --build
+
+# 3. View logs
+docker-compose logs -f
+
+# 4. Open browser
+# http://localhost:3001
+```
+
+**Docker Features:**
+- ✅ Maximum isolation with project sandboxing
+- ✅ AWS Bedrock support (no Anthropic API key needed)
+- ✅ Persistent volumes for projects and sessions
+- ✅ Built-in Git and development tools
+- ✅ Cloudflare Tunnel support for remote access
+
+### CI/CD Deployment
+
+The project includes GitHub Actions workflow for automated deployment:
+
+**Setup:**
+1. Configure self-hosted runner
+2. Add repository secrets:
+   - `ENV_FILE` - Complete .env file content
+   - `CLOUDFLARED_CREDENTIALS` - Cloudflare tunnel credentials (optional)
+3. Push to `main` branch to trigger automatic deployment
+
+**Workflow Features:**
+- Automatic deployment on push to main/master
+- Docker container management
+- Cloudflare Tunnel setup
+- Image cleanup
+
 ## Security & Tools Configuration
 
 **🔒 Important Notice**: All Claude Code tools are **disabled by default**. This prevents potentially harmful operations from running automatically.
@@ -215,6 +264,72 @@ It provides
 **Setup & Documentation**: Visit the [TaskMaster AI GitHub repository](https://github.com/eyaltoledano/claude-task-master) for installation instructions, configuration guides, and usage examples.
 After installing it you should be able to enable it from the Settings
 
+## AWS Bedrock Configuration
+
+Claude Code UI supports AWS Bedrock for Claude API access, eliminating the need for Anthropic API keys.
+
+### Setup Bedrock Authentication
+
+Add to your `.env` file:
+
+```bash
+CLAUDE_CODE_USE_BEDROCK=1
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+```
+
+**Benefits:**
+- No Anthropic API key required
+- Use existing AWS infrastructure
+- Consolidated billing through AWS
+- OAuth login automatically hidden in UI
+
+**Note:** When using Bedrock, the UI will detect it automatically and hide the OAuth login interface since authentication is handled via AWS credentials.
+
+## Cloudflare Tunnel Configuration
+
+Enable secure remote access to your Claude Code UI instance without exposing ports.
+
+### Setup Cloudflare Tunnel
+
+1. **Create Cloudflare Tunnel:**
+   - Visit [Cloudflare Zero Trust Dashboard](https://one.dash.cloudflare.com/)
+   - Create a new tunnel and get credentials
+
+2. **Configure credentials:**
+   ```bash
+   # Copy example file
+   cp cloudflared/credentials.json.example cloudflared/credentials.json
+
+   # Edit with your tunnel credentials
+   nano cloudflared/credentials.json
+   ```
+
+3. **Update config:**
+   ```yaml
+   # cloudflared/config.yml
+   tunnel: your-tunnel-id
+   credentials-file: /etc/cloudflared/credentials.json
+
+   ingress:
+     - hostname: your-domain.com
+       service: http://claude-code-ui:3001
+     - service: http_status:404
+   ```
+
+4. **Deploy with Docker Compose:**
+   ```bash
+   docker-compose up -d
+   ```
+
+**Benefits:**
+- Secure access from anywhere
+- No port forwarding or firewall configuration
+- HTTPS by default
+- DDoS protection included
+
+**GitHub Actions Integration:** The CI/CD workflow automatically sets up Cloudflare Tunnel using `CLOUDFLARED_CREDENTIALS` secret.
 
 ## Usage Guide
 
@@ -342,6 +457,12 @@ GNU General Public License v3.0 - see [LICENSE](LICENSE) file for details.
 
 This project is open source and free to use, modify, and distribute under the GPL v3 license.
 
+## Additional Documentation
+
+- **[CLAUDE.md](CLAUDE.md)** - Comprehensive project architecture and development guide for Claude Code
+- **[WARP.md](WARP.md)** - Development commands and architecture reference for Warp terminal
+- **[DOCKER.md](DOCKER.md)** - Complete Docker setup and deployment guide
+
 ## Acknowledgments
 
 ### Built With
@@ -353,6 +474,7 @@ This project is open source and free to use, modify, and distribute under the GP
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 - **[CodeMirror](https://codemirror.net/)** - Advanced code editor
 - **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** *(Optional)* - AI-powered project management and task planning
+- **[Cloudflare Tunnel](https://www.cloudflare.com/products/tunnel/)** - Secure remote access
 
 ## Support & Community
 
