@@ -240,8 +240,8 @@ The project includes GitHub Actions workflow for automated deployment:
 To use Claude Code's full functionality, you'll need to manually enable tools:
 
 1. **Open Tools Settings** - Click the gear icon in the sidebar
-3. **Enable Selectively** - Turn on only the tools you need
-4. **Apply Settings** - Your preferences are saved locally
+2. **Enable Selectively** - Turn on only the tools you need
+3. **Apply Settings** - Your preferences are saved locally
 
 <div align="center">
 
@@ -336,8 +336,7 @@ Enable secure remote access to your Claude Code UI instance without exposing por
 ### Core Features
 
 #### Project Management
-It automatically discovers Claude Code, Cursor or Codex sessions when available and groups them together into projects
-session counts
+- **Auto-discovery** - Automatically discovers Claude Code, Cursor or Codex sessions and groups them into projects with session counts
 - **Project Actions** - Rename, delete, and organize projects
 - **Smart Navigation** - Quick access to recent projects and sessions
 - **MCP support** - Add your own MCP servers through the UI 
@@ -356,7 +355,9 @@ session counts
 - **File Operations** - Create, rename, delete files and directories
 
 #### Git Explorer
-
+- **Branch Management** - View, create, and switch between branches
+- **Change Tracking** - Stage, unstage, and review file changes
+- **Commit Interface** - Create commits with messages directly from the UI
 
 #### TaskMaster AI Integration *(Optional)*
 - **Visual Task Board** - Kanban-style interface for managing development tasks
