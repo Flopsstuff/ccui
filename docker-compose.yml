@@ -2,7 +2,7 @@ services:
   claude-code-ui:
     build: .
     ports:
-      - "3001:3001"
+      - "3007:3001"
     volumes:
       # Claude sessions (persistent)
       - claude-sessions:/root/.claude
