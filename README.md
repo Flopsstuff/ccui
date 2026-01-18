@@ -188,7 +188,7 @@ The application will start at the port you specified in your .env
 
 For production deployment or isolated environment, use Docker:
 
-**📖 Full Docker Guide:** See [DOCKER.md](DOCKER.md) for comprehensive Docker setup instructions.
+**📖 Full Docker Guide:** See [Docker Setup](docs/docker.md) for comprehensive Docker setup instructions.
 
 **Quick Docker Start:**
 
@@ -463,7 +463,7 @@ This project is open source and free to use, modify, and distribute under the GP
 - **[Documentation](https://flopsstuff.github.io/ccui/)** - Full project documentation
 - **[CLAUDE.md](CLAUDE.md)** - Comprehensive project architecture and development guide for Claude Code
 - **[WARP.md](WARP.md)** - Development commands and architecture reference for Warp terminal
-- **[DOCKER.md](DOCKER.md)** - Complete Docker setup and deployment guide
+- **[Docker Setup](docs/docker.md)** - Complete Docker setup and deployment guide
 
 ## Acknowledgments
 

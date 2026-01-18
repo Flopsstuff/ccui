@@ -1,6 +1,7 @@
 nav:
   - index.md
   - getting-started.md
+  - docker.md
   - architecture.md
   - configuration.md
   - providers.md
