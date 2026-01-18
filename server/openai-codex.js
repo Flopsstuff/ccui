@@ -210,12 +210,14 @@ export async function queryCodex(command, options = {}, ws) {
 
     // Thread options with sandbox and approval settings
     const threadOptions = {
-      workingDirectory,
-      skipGitRepoCheck: true,
-      sandboxMode,
-      approvalPolicy,
+      working_directory: workingDirectory,
+      skip_git_repo_check: true,
+      sandbox_mode: sandboxMode,
+      approval_policy: approvalPolicy,
       model
     };
+
+    console.log('[Codex] Starting with options:', JSON.stringify(threadOptions, null, 2));
 
     // Start or resume thread
     if (sessionId) {
