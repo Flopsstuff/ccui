@@ -460,6 +460,7 @@ This project is open source and free to use, modify, and distribute under the GP
 
 ## Additional Documentation
 
+- **[Documentation](https://flopsstuff.github.io/ccui/)** - Full project documentation
 - **[CLAUDE.md](CLAUDE.md)** - Comprehensive project architecture and development guide for Claude Code
 - **[WARP.md](WARP.md)** - Development commands and architecture reference for Warp terminal
 - **[DOCKER.md](DOCKER.md)** - Complete Docker setup and deployment guide
