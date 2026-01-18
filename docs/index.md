@@ -69,7 +69,7 @@ AI Code UI (formerly Claude Code UI) is a full-stack web application providing a
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/anthropics/claude-code/issues)
+- **Issues**: [GitHub Issues](https://github.com/Flopsstuff/ccui/issues)
 - **Documentation**: This docs folder
 - **CLAUDE.md**: In-repo architecture guide for AI assistants
 
