@@ -61,7 +61,8 @@ function Sidebar({
   onShowVersionModal,
   isPWA,
   isMobile,
-  onToggleSidebar
+  onToggleSidebar,
+  onNavigateHome
 }) {
   const [expandedProjects, setExpandedProjects] = useState(new Set());
   const [editingProject, setEditingProject] = useState(null);
@@ -508,7 +509,11 @@ function Sidebar({
               </div>
             </a>
           ) : (
-            <div className="flex items-center gap-3">
+            <button
+              onClick={onNavigateHome}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer text-left"
+              title="Go to home"
+            >
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm">
                 <MessageSquare className="w-4 h-4 text-primary-foreground" />
               </div>
@@ -516,7 +521,7 @@ function Sidebar({
                 <h1 className="text-lg font-bold text-foreground">AI Code UI</h1>
                 <p className="text-sm text-muted-foreground">AI coding assistant interface</p>
               </div>
-            </div>
+            </button>
           )}
           {onToggleSidebar && (
             <Button
@@ -559,7 +564,11 @@ function Sidebar({
                 </div>
               </a>
             ) : (
-              <div className="flex items-center gap-3">
+              <button
+                onClick={onNavigateHome}
+                className="flex items-center gap-3 active:opacity-70 transition-opacity text-left"
+                title="Go to home"
+              >
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <MessageSquare className="w-4 h-4 text-primary-foreground" />
                 </div>
@@ -567,7 +576,7 @@ function Sidebar({
                   <h1 className="text-lg font-semibold text-foreground">AI Code UI</h1>
                   <p className="text-sm text-muted-foreground">Projects</p>
                 </div>
-              </div>
+              </button>
             )}
             <div className="flex gap-2">
               <button

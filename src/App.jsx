@@ -355,6 +355,12 @@ function AppContent() {
     }
   }, [sessionId, projects, navigate]);
 
+  const handleNavigateHome = () => {
+    setSelectedProject(null);
+    setSelectedSession(null);
+    navigate('/');
+  };
+
   const handleProjectSelect = (project) => {
     setSelectedProject(project);
     setSelectedSession(null);
@@ -775,6 +781,7 @@ function AppContent() {
                 isPWA={isPWA}
                 isMobile={isMobile}
                 onToggleSidebar={() => setSidebarVisible(false)}
+                onNavigateHome={handleNavigateHome}
               />
             ) : (
               /* Collapsed Sidebar */
@@ -869,6 +876,7 @@ function AppContent() {
               isPWA={isPWA}
               isMobile={isMobile}
               onToggleSidebar={() => setSidebarVisible(false)}
+              onNavigateHome={handleNavigateHome}
             />
           </div>
         </div>
