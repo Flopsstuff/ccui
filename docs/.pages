@@ -1,0 +1,11 @@
+nav:
+  - index.md
+  - getting-started.md
+  - architecture.md
+  - configuration.md
+  - providers.md
+  - api-reference.md
+  - websocket-api.md
+  - database.md
+  - frontend.md
+  - contributing.md
