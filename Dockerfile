@@ -1,7 +1,10 @@
 FROM node:20-slim
 
+# Prevent apt from asking interactive questions
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install dependencies for node-pty, Claude CLI and AWS CLI
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     make \
     g++ \
