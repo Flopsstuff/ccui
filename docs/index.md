@@ -17,6 +17,7 @@ AI Code UI (formerly Claude Code UI) is a full-stack web application providing a
 | [Getting Started](./getting-started.md) | Installation and initial setup |
 | [Docker Setup](./docker.md) | Docker deployment and configuration |
 | [Architecture](./architecture.md) | System architecture overview |
+| [Project Structure](./project-structure.md) | File and directory reference |
 | [Configuration](./configuration.md) | Environment variables and settings |
 | [API Reference](./api-reference.md) | REST API endpoints |
 | [WebSocket API](./websocket-api.md) | Real-time communication protocol |
