@@ -10,6 +10,9 @@ services:
       # Cursor sessions (persistent)
       - cursor-sessions:/root/.cursor
 
+      # Cursor config/auth (persistent)
+      - cursor-config:/root/.config/cursor
+
       # Codex sessions (persistent)
       - codex-sessions:/root/.codex
 
@@ -64,5 +67,6 @@ services:
 volumes:
   claude-sessions:
   cursor-sessions:
+  cursor-config:
   codex-sessions:
   projects-data:
