@@ -210,10 +210,10 @@ export async function queryCodex(command, options = {}, ws) {
 
     // Thread options with sandbox and approval settings
     const threadOptions = {
-      working_directory: workingDirectory,
-      skip_git_repo_check: true,
-      sandbox_mode: sandboxMode,
-      approval_policy: approvalPolicy,
+      workingDirectory,
+      skipGitRepoCheck: true,
+      sandboxMode,
+      approvalPolicy,
       model
     };
 
