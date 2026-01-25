@@ -12,18 +12,45 @@ AI Code UI (formerly Claude Code UI) is a full-stack web application providing a
 
 ## Quick Links
 
+### Getting Started
+
 | Document | Description |
 |----------|-------------|
 | [Getting Started](./getting-started.md) | Installation and initial setup |
+| [CLI Reference](./cli.md) | Command-line interface usage |
 | [Docker Setup](./docker.md) | Docker deployment and configuration |
+| [Configuration](./configuration.md) | Environment variables and settings |
+
+### Architecture & Development
+
+| Document | Description |
+|----------|-------------|
 | [Architecture](./architecture.md) | System architecture overview |
 | [Project Structure](./project-structure.md) | File and directory reference |
-| [Configuration](./configuration.md) | Environment variables and settings |
+| [Frontend](./frontend.md) | React frontend architecture |
+| [Database](./database.md) | Database schema and operations |
+
+### API Documentation
+
+| Document | Description |
+|----------|-------------|
 | [API Reference](./api-reference.md) | REST API endpoints |
 | [WebSocket API](./websocket-api.md) | Real-time communication protocol |
+
+### Features & Integrations
+
+| Document | Description |
+|----------|-------------|
 | [AI Providers](./providers.md) | Claude, Cursor, and Codex integration |
-| [Database](./database.md) | Database schema and operations |
-| [Frontend](./frontend.md) | React frontend architecture |
+| [TaskMaster](./taskmaster.md) | AI-powered task management integration |
+| [MCP Servers](./mcp-servers.md) | Model Context Protocol server configuration |
+
+### Operations & Security
+
+| Document | Description |
+|----------|-------------|
+| [Security](./security.md) | Security architecture and best practices |
+| [Troubleshooting](./troubleshooting.md) | Common issues and solutions |
 | [Contributing](./contributing.md) | How to contribute to the project |
 
 ## Features
