@@ -140,7 +140,22 @@ Add a manual project.
 
 ### DELETE /api/projects/:encodedPath
 
-Remove a manual project.
+Remove a manual project from the project list.
+
+### DELETE /api/projects/:projectName/with-sessions
+
+Delete a project and all its associated sessions.
+
+**Query Parameters:**
+- `force` (boolean) - Force deletion even if project has sessions
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Project and sessions deleted"
+}
+```
 
 ### GET /api/projects/:encodedPath/sessions
 

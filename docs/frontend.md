@@ -5,11 +5,13 @@ This document describes the React frontend architecture of AI Code UI.
 ## Technology Stack
 
 - **React** 18.2 - UI library
-- **Vite** 7.0 - Build tool and dev server
+- **Vite** 7.3 - Build tool and dev server
 - **Tailwind CSS** 3.4 - Utility-first CSS
 - **React Router** 6.8 - Client-side routing
 - **CodeMirror** 6 - Code editor
 - **xterm.js** 5.5 - Terminal emulator
+- **i18next** 25.8 - Internationalization framework
+- **react-i18next** 16.5 - React bindings for i18next
 
 ## Directory Structure
 
@@ -28,6 +30,7 @@ src/
 │   ├── Shell.jsx         # Terminal
 │   ├── GitPanel.jsx      # Git operations
 │   ├── MainContent.jsx   # Content router
+│   ├── ThinkingModeSelector.jsx  # Extended thinking mode selector
 │   └── ui/               # Reusable UI components
 │
 ├── contexts/             # React contexts
@@ -40,6 +43,25 @@ src/
 │   ├── useLocalStorage.jsx
 │   ├── useAudioRecorder.js
 │   └── useVersionCheck.js
+│
+├── i18n/                 # Internationalization
+│   ├── config.js         # i18next configuration
+│   ├── languages.js      # Supported languages
+│   └── locales/          # Translation files
+│       ├── en/           # English translations
+│       │   ├── common.json
+│       │   ├── chat.json
+│       │   ├── settings.json
+│       │   ├── sidebar.json
+│       │   ├── auth.json
+│       │   └── codeEditor.json
+│       └── zh-CN/        # Simplified Chinese translations
+│           ├── common.json
+│           ├── chat.json
+│           ├── settings.json
+│           ├── sidebar.json
+│           ├── auth.json
+│           └── codeEditor.json
 │
 └── utils/                # Utility functions
     ├── api.js            # REST API client
@@ -660,6 +682,112 @@ function MessageList({ messages }) {
   );
 }
 ```
+
+---
+
+## Internationalization (i18n)
+
+The application uses i18next for multi-language support.
+
+### Configuration
+
+Located in `src/i18n/config.js`:
+
+```javascript
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: { en: {...}, 'zh-CN': {...} },
+    lng: getSavedLanguage(),
+    fallbackLng: 'en',
+    ns: ['common', 'settings', 'auth', 'sidebar', 'chat', 'codeEditor'],
+    defaultNS: 'common',
+    interpolation: { escapeValue: false },
+    detection: {
+      order: ['localStorage'],
+      lookupLocalStorage: 'userLanguage',
+    },
+  });
+```
+
+### Supported Languages
+
+Defined in `src/i18n/languages.js`:
+
+| Code | Label | Native Name |
+|------|-------|-------------|
+| `en` | English | English |
+| `zh-CN` | Simplified Chinese | 简体中文 |
+
+### Translation Namespaces
+
+| Namespace | Purpose |
+|-----------|---------|
+| `common` | Shared UI elements, buttons, labels |
+| `settings` | Settings panel strings |
+| `auth` | Login, registration, authentication |
+| `sidebar` | Sidebar navigation, projects, sessions |
+| `chat` | Chat interface, messages, tools |
+| `codeEditor` | Code editor UI strings |
+
+### Using Translations in Components
+
+```jsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation('chat');
+
+  return (
+    <div>
+      <h1>{t('thinkingMode.selector.title')}</h1>
+      <p>{t('input.placeholder', { provider: 'Claude' })}</p>
+    </div>
+  );
+}
+```
+
+### Adding a New Language
+
+1. Create locale folder: `src/i18n/locales/{lang-code}/`
+2. Copy all JSON files from `en/` and translate
+3. Import and add resources in `src/i18n/config.js`
+4. Add language entry in `src/i18n/languages.js`
+
+---
+
+## Extended Thinking Modes
+
+The `ThinkingModeSelector` component allows users to select different thinking depth levels for Claude responses.
+
+### Available Modes
+
+| Mode | Prefix | Description |
+|------|--------|-------------|
+| Standard | (none) | Regular Claude response |
+| Think | `think` | Basic extended thinking |
+| Think Hard | `think hard` | More thorough evaluation |
+| Think Harder | `think harder` | Deep analysis with alternatives |
+| Ultrathink | `ultrathink` | Maximum thinking budget |
+
+### Usage
+
+```jsx
+import ThinkingModeSelector from './ThinkingModeSelector';
+
+<ThinkingModeSelector
+  selectedMode="think"
+  onModeChange={(mode) => setThinkingMode(mode)}
+  onClose={() => setShowSelector(false)}
+/>
+```
+
+The selected mode's prefix is prepended to the user's message when sent to Claude.
 
 ---
 

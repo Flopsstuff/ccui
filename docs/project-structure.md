@@ -172,6 +172,12 @@ Complete file and directory reference for AI Code UI.
 | `ProjectCreationWizard.jsx` | Project setup wizard |
 | `TaskMasterSetupWizard.jsx` | TaskMaster onboarding |
 
+#### Chat Components
+
+| File | Purpose |
+|------|---------|
+| `ThinkingModeSelector.jsx` | Extended thinking mode selection |
+
 #### Utility Components
 
 | File | Purpose |
@@ -223,6 +229,17 @@ Complete file and directory reference for AI Code UI.
 | `useLocalStorage.jsx` | Local storage persistence |
 | `useAudioRecorder.js` | Audio recording |
 | `useVersionCheck.js` | Version update check |
+
+### Internationalization (`/src/i18n/`)
+
+| File | Purpose |
+|------|---------|
+| `config.js` | i18next initialization and configuration |
+| `languages.js` | Supported languages (en, zh-CN) |
+| `locales/en/*.json` | English translations |
+| `locales/zh-CN/*.json` | Simplified Chinese translations |
+
+Translation namespaces: `common`, `settings`, `auth`, `sidebar`, `chat`, `codeEditor`
 
 ### Utilities (`/src/utils/`)
 

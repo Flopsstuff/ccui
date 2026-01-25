@@ -101,6 +101,32 @@ ANTHROPIC_SMALL_FAST_MODEL='eu.anthropic.claude-haiku-4-5-20251001-v1:0'
 
 ---
 
+## Internationalization
+
+The application supports multiple languages through i18next. Language preferences are stored in localStorage.
+
+### Supported Languages
+
+| Code | Language |
+|------|----------|
+| `en` | English (default) |
+| `zh-CN` | Simplified Chinese (简体中文) |
+
+### Language Configuration
+
+Language preference is stored in `localStorage` with key `userLanguage`. The application will:
+
+1. Check localStorage for saved preference
+2. Fall back to English if no preference or unsupported language
+
+### Adding New Languages
+
+1. Create translation files in `src/i18n/locales/{lang-code}/`
+2. Add language to `src/i18n/languages.js`
+3. Import translations in `src/i18n/config.js`
+
+---
+
 ## Configuration Files
 
 ### project-config.json
@@ -256,6 +282,19 @@ User-configurable settings stored in database:
 | Default Provider | claude, cursor, codex | Default AI provider |
 | Git Name | (text) | Git commit author name |
 | Git Email | (text) | Git commit author email |
+| Language | en, zh-CN | UI language (stored in localStorage) |
+
+### Extended Thinking Modes
+
+Chat interface supports extended thinking modes for Claude:
+
+| Mode | Description |
+|------|-------------|
+| Standard | Regular Claude response |
+| Think | Basic extended thinking |
+| Think Hard | More thorough evaluation |
+| Think Harder | Deep analysis with alternatives |
+| Ultrathink | Maximum thinking budget |
 
 ### Per-Project Settings
 

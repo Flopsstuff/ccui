@@ -59,6 +59,20 @@ Sessions are stored as JSONL files:
 
 Each line contains a JSON object representing a conversation turn.
 
+### Extended Thinking Modes
+
+Claude supports extended thinking for more thorough analysis. These modes are available in the chat interface via the ThinkingModeSelector component:
+
+| Mode | Command Prefix | Description |
+|------|----------------|-------------|
+| Standard | (none) | Regular Claude response |
+| Think | `think` | Basic extended thinking |
+| Think Hard | `think hard` | More thorough evaluation |
+| Think Harder | `think harder` | Deep analysis with alternatives |
+| Ultrathink | `ultrathink` | Maximum thinking budget |
+
+Higher thinking modes consume more tokens but provide more thorough analysis.
+
 ### Tool Approval System
 
 Claude uses a tool approval system for potentially dangerous operations:

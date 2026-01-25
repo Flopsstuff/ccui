@@ -59,11 +59,19 @@ AI Code UI (formerly Claude Code UI) is a full-stack web application providing a
 - Switch between Claude, Cursor, and Codex seamlessly
 - Unified chat interface for all providers
 - Provider-specific model selection
+- Extended thinking modes (Think, Think Hard, Think Harder, Ultrathink)
 
 ### Project Management
 - Automatic project discovery from `~/.claude/`, `~/.cursor/`, `~/.codex/`
 - Session history and continuation
-- Manual project creation and import
+- Manual project creation and import with folder browser
+- Delete projects with all associated sessions
+
+### Internationalization (i18n)
+- Multi-language support with i18next
+- Currently supported: English, Simplified Chinese (简体中文)
+- Language auto-detection and localStorage persistence
+- Extensible translation system with namespaces
 
 ### Development Tools
 - Integrated file browser with CodeMirror editor

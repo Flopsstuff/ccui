@@ -304,11 +304,13 @@ Different providers use different storage formats:
 
 ### Frontend
 - React 18.2
-- Vite 7.0
+- Vite 7.3
 - Tailwind CSS 3.4
 - CodeMirror 6
 - xterm.js 5.5
 - React Router 6.8
+- i18next 25.8 (internationalization)
+- react-i18next 16.5
 
 ### Shared
 - ES modules
