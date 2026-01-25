@@ -12,44 +12,12 @@ Before you begin, ensure you have:
 
 ## Installation Methods
 
-### Method 1: npm Global Install (Recommended)
-
-```bash
-# Install globally
-npm install -g @siteboon/claude-code-ui
-
-# Start the application
-cloudcli start
-# or
-claude-code-ui start
-```
-
-### Method 2: npx (No Installation)
-
-```bash
-npx @siteboon/claude-code-ui
-```
-
-### Method 3: Clone and Run
+### Method 1: Docker (Recommended)
 
 ```bash
 # Clone the repository
-git clone https://github.com/Flopsstuff/ccui.git
-cd ccui
-
-# Install dependencies
-npm ci
-
-# Start development server
-npm run dev
-```
-
-### Method 4: Docker
-
-```bash
-# Clone the repository
-git clone https://github.com/Flopsstuff/ccui.git
-cd ccui
+git clone https://github.com/siteboon/claudecodeui.git
+cd claudecodeui
 
 # Build and run with Docker Compose
 docker-compose up --build
@@ -62,6 +30,39 @@ docker-compose logs -f
 
 # Stop containers
 docker-compose down
+```
+
+### Method 2: Clone and Run
+
+```bash
+# Clone the repository
+git clone https://github.com/siteboon/claudecodeui.git
+cd claudecodeui
+
+# Install dependencies
+npm ci
+
+# Start development server
+npm run dev
+```
+
+### Method 3: npm Package
+
+For the official npm package, visit the main repository:
+
+**GitHub:** [https://github.com/siteboon/claudecodeui](https://github.com/siteboon/claudecodeui)
+
+```bash
+# Install globally
+npm install -g @siteboon/claude-code-ui
+
+# Start the application
+cloudcli start
+# or
+claude-code-ui start
+
+# Or run without installing
+npx @siteboon/claude-code-ui
 ```
 
 ## Configuration
