@@ -34,8 +34,8 @@ npx @siteboon/claude-code-ui
 
 ```bash
 # Clone the repository
-git clone https://github.com/anthropics/claude-code-ui.git
-cd claude-code-ui
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
 
 # Install dependencies
 npm ci
@@ -48,14 +48,20 @@ npm run dev
 
 ```bash
 # Clone the repository
-git clone https://github.com/anthropics/claude-code-ui.git
-cd claude-code-ui
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
 
 # Build and run with Docker Compose
 docker-compose up --build
 
 # Or run in background
 docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop containers
+docker-compose down
 ```
 
 ## Configuration
