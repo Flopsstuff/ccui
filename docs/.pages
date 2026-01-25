@@ -1,12 +1,18 @@
 nav:
   - index.md
   - getting-started.md
+  - cli.md
   - docker.md
   - architecture.md
+  - project-structure.md
   - configuration.md
   - providers.md
+  - mcp-servers.md
+  - taskmaster.md
   - api-reference.md
   - websocket-api.md
   - database.md
   - frontend.md
+  - security.md
+  - troubleshooting.md
   - contributing.md
