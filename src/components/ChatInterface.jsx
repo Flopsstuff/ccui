@@ -3108,8 +3108,11 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
     const scrollDiff = newScrollHeight - height;
 
     container.scrollTop = top + Math.max(scrollDiff, 0);
-    pendingScrollRestoreRef.current = null;
-  }, [chatMessages.length]);
+    // Clear the ref after a microtask to ensure auto-scroll useEffect sees it
+    queueMicrotask(() => {
+      pendingScrollRestoreRef.current = null;
+    });
+  }, [sessionMessages.length]);
 
   useEffect(() => {
     // Load session messages when session changes
@@ -4173,6 +4176,9 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
 
   useEffect(() => {
     // Auto-scroll to bottom when new messages arrive
+    // Skip if we're restoring scroll position after loading older messages
+    if (pendingScrollRestoreRef.current) return;
+
     if (scrollContainerRef.current && chatMessages.length > 0) {
       if (autoScrollToBottom) {
         // If auto-scroll is enabled, always scroll to bottom unless user has manually scrolled up
