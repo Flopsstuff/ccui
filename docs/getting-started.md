@@ -16,8 +16,8 @@ Before you begin, ensure you have:
 
 ```bash
 # Clone the repository
-git clone https://github.com/siteboon/claudecodeui.git
-cd claudecodeui
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
 
 # Build and run with Docker Compose
 docker-compose up --build
@@ -36,8 +36,8 @@ docker-compose down
 
 ```bash
 # Clone the repository
-git clone https://github.com/siteboon/claudecodeui.git
-cd claudecodeui
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
 
 # Install dependencies
 npm ci

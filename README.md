@@ -1,30 +1,35 @@
 <div align="center">
-  <img src="public/logo.svg" alt="Claude Code UI" width="64" height="64">
-  <h1>Cloud CLI (aka Claude Code UI)</h1>
+  <img src="public/logo.svg" alt="Cloud CLI" width="64" height="64">
+  <h1>Cloud CLI (Claude Code UI)</h1>
+  <p>Desktop and mobile UI for Claude Code, Cursor CLI, and Codex</p>
+  
+  <p>
+    <strong>Fork of <a href="https://github.com/siteboon/claudecodeui">siteboon/claudecodeui</a> with Docker support</strong>
+  </p>
 </div>
 
+---
 
-A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Cursor CLI](https://docs.cursor.com/en/cli/overview) and [Codex](https://developers.openai.com/codex). You can use it locally or remotely to view your active projects and sessions in Claude Code, Cursor, or Codex and make changes to them from everywhere (mobile or desktop). This gives you a proper interface that works everywhere. 
+A web interface for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Cursor CLI](https://docs.cursor.com/en/cli/overview), and [Codex](https://developers.openai.com/codex). Access your AI coding assistants from anywhere — desktop or mobile.
 
- [English](./README.md) | [中文](./README.zh-CN.md)
+**Key difference from original:** This fork adds full Docker and Docker Compose support for easy self-hosted deployment, including Cloudflare Tunnel integration for secure remote access.
 
 ## Screenshots
 
 <div align="center">
-  
 <table>
 <tr>
 <td align="center">
 <h3>Desktop View</h3>
 <img src="public/screenshots/desktop-main.png" alt="Desktop Interface" width="400">
 <br>
-<em>Main interface showing project overview and chat</em>
+<em>Main interface with project overview and chat</em>
 </td>
 <td align="center">
 <h3>Mobile Experience</h3>
 <img src="public/screenshots/mobile-chat.png" alt="Mobile Interface" width="250">
 <br>
-<em>Responsive mobile design with touch navigation</em>
+<em>Responsive mobile design</em>
 </td>
 </tr>
 <tr>
@@ -32,465 +37,93 @@ A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/cla
 <h3>CLI Selection</h3>
 <img src="public/screenshots/cli-selection.png" alt="CLI Selection" width="400">
 <br>
-<em>Select between Claude Code, Cursor CLI and Codex</em>
+<em>Choose between Claude Code, Cursor CLI, and Codex</em>
 </td>
 </tr>
 </table>
-
-
-
 </div>
 
 ## Features
 
-- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile so you can also use Claude Code, Cursor, or Codex from mobile
-- **Interactive Chat Interface** - Built-in chat interface for seamless communication with Claude Code, Cursor, or Codex
-- **Integrated Shell Terminal** - Direct access to Claude Code, Cursor CLI, or Codex through built-in shell functionality
-- **File Explorer** - Interactive file tree with syntax highlighting and live editing
-- **Git Explorer** - View, stage and commit your changes. You can also switch branches
-- **Session Management** - Resume conversations, manage multiple sessions, and track history
-- **TaskMaster AI Integration** *(Optional)* - Advanced project management with AI-powered task planning, PRD parsing, and workflow automation
-- **Model Compatibility** - Works with Claude Sonnet 4.5, Opus 4.5, and GPT-5.2
-- **AWS Bedrock Support** - Use Claude via AWS Bedrock without Anthropic API keys
-- **Cloudflare Tunnel** - Secure remote access without exposing ports 
-
+- **Multi-provider support** — Claude Code, Cursor CLI, Codex
+- **Responsive design** — Works on desktop, tablet, and mobile
+- **Interactive chat** — Real-time streaming with WebSocket
+- **File explorer** — Browse and edit files with syntax highlighting
+- **Git integration** — View, stage, commit, switch branches
+- **Session management** — Resume conversations, track history
+- **AWS Bedrock support** — Use Claude without Anthropic API keys
 
 ## Quick Start
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v20 or higher
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed and configured, and/or
-- [Cursor CLI](https://docs.cursor.com/en/cli/overview) installed and configured, and/or
-- [Codex](https://developers.openai.com/codex) installed and configured
+- [Node.js](https://nodejs.org/) v20+
+- At least one CLI installed: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Cursor CLI](https://docs.cursor.com/en/cli/overview), or [Codex](https://developers.openai.com/codex)
 
-### One-click Operation (Recommended)
+### Option 1: Docker (Recommended)
 
-No installation required, direct operation:
+```bash
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
+docker-compose up --build
+```
+
+### Option 2: Clone and Run
+
+```bash
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
+npm ci
+npm run dev
+```
+
+### Option 3: npm Package
+
+Use the official npm package from the original repository:
 
 ```bash
 npx @siteboon/claude-code-ui
 ```
 
-The server will start and be accessible at `http://localhost:3001` (or your configured PORT).
-
-**To restart**: Simply run the same `npx` command again after stopping the server
-### Global Installation (For Regular Use)
-
-For frequent use, install globally once:
+Or install globally:
 
 ```bash
 npm install -g @siteboon/claude-code-ui
+cloudcli start
 ```
 
-Then start with a simple command:
+### Configuration
 
-```bash
-claude-code-ui
-```
-
-
-**To restart**: Stop with Ctrl+C and run `claude-code-ui` again.
-
-**To update**:
-```bash
-cloudcli update
-```
-
-### CLI Usage
-
-After global installation, you have access to both `claude-code-ui` and `cloudcli` commands:
-
-| Command / Option | Short | Description |
-|------------------|-------|-------------|
-| `cloudcli` or `claude-code-ui` | | Start the server (default) |
-| `cloudcli start` | | Start the server explicitly |
-| `cloudcli status` | | Show configuration and data locations |
-| `cloudcli update` | | Update to the latest version |
-| `cloudcli help` | | Show help information |
-| `cloudcli version` | | Show version information |
-| `--port <port>` | `-p` | Set server port (default: 3001) |
-| `--database-path <path>` | | Set custom database location |
-
-**Examples:**
-```bash
-cloudcli                          # Start with defaults
-cloudcli -p 8080              # Start on custom port
-cloudcli status                   # Show current configuration
-```
-
-### Run as Background Service (Recommended for Production)
-
-For production use, run Claude Code UI as a background service using PM2 (Process Manager 2):
-
-#### Install PM2
-
-```bash
-npm install -g pm2
-```
-
-#### Start as Background Service
-
-```bash
-# Start the server in background
-pm2 start claude-code-ui --name "claude-code-ui"
-
-# Or using the shorter alias
-pm2 start cloudcli --name "claude-code-ui"
-
-# Start on a custom port
-pm2 start cloudcli --name "claude-code-ui" -- --port 8080
-```
-
-
-#### Auto-Start on System Boot
-
-To make Claude Code UI start automatically when your system boots:
-
-```bash
-# Generate startup script for your platform
-pm2 startup
-
-# Save current process list
-pm2 save
-```
-
-
-### Local Development Installation
-
-1. **Clone the repository:**
-```bash
-git clone https://github.com/siteboon/claudecodeui.git
-cd claudecodeui
-```
-
-2. **Install dependencies:**
-```bash
-npm install
-```
-
-3. **Configure environment:**
 ```bash
 cp .env.example .env
-# Edit .env with your preferred settings
+# Edit .env with your settings
 ```
 
-4. **Start the application:**
-```bash
-# Development mode (with hot reload)
-npm run dev
-
-```
-The application will start at the port you specified in your .env
-
-5. **Open your browser:**
-   - Development: `http://localhost:3001`
-
-### Docker Installation
-
-For production deployment or isolated environment, use Docker:
-
-**📖 Full Docker Guide:** See [Docker Setup](docs/docker.md) for comprehensive Docker setup instructions.
-
-**Quick Docker Start:**
-
-```bash
-# 1. Configure environment
-cp .env.example .env
-# Edit .env with AWS credentials or other settings
-
-# 2. Build and start
-docker-compose up -d --build
-
-# 3. View logs
-docker-compose logs -f
-
-# 4. Open browser
-# http://localhost:3001
-```
-
-**Docker Features:**
-- ✅ Maximum isolation with project sandboxing
-- ✅ AWS Bedrock support (no Anthropic API key needed)
-- ✅ Persistent volumes for projects and sessions
-- ✅ Built-in Git and development tools
-- ✅ Cloudflare Tunnel support for remote access
-
-### CI/CD Deployment
-
-The project includes GitHub Actions workflow for automated deployment:
-
-**Setup:**
-1. Configure self-hosted runner
-2. Add repository secrets:
-   - `ENV_FILE` - Complete .env file content
-   - `CLOUDFLARED_CREDENTIALS` - Cloudflare tunnel credentials (optional)
-3. Push to `main` branch to trigger automatic deployment
-
-**Workflow Features:**
-- Automatic deployment on push to main/master
-- Docker container management
-- Cloudflare Tunnel setup
-- Image cleanup
-
-## Security & Tools Configuration
-
-**🔒 Important Notice**: All Claude Code tools are **disabled by default**. This prevents potentially harmful operations from running automatically.
-
-### Enabling Tools
-
-To use Claude Code's full functionality, you'll need to manually enable tools:
-
-1. **Open Tools Settings** - Click the gear icon in the sidebar
-2. **Enable Selectively** - Turn on only the tools you need
-3. **Apply Settings** - Your preferences are saved locally
-
-<div align="center">
-
-![Tools Settings Modal](public/screenshots/tools-modal.png)
-*Tools Settings interface - enable only what you need*
-
-</div>
-
-**Recommended approach**: Start with basic tools enabled and add more as needed. You can always adjust these settings later.
-
-## TaskMaster AI Integration *(Optional)*
-
-Claude Code UI supports **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** (aka claude-task-master) integration for advanced project management and AI-powered task planning.
-
-It provides
-- AI-powered task generation from PRDs (Product Requirements Documents)
-- Smart task breakdown and dependency management  
-- Visual task boards and progress tracking
-
-**Setup & Documentation**: Visit the [TaskMaster AI GitHub repository](https://github.com/eyaltoledano/claude-task-master) for installation instructions, configuration guides, and usage examples.
-After installing it you should be able to enable it from the Settings
-
-## AWS Bedrock Configuration
-
-Claude Code UI supports AWS Bedrock for Claude API access, eliminating the need for Anthropic API keys.
-
-### Setup Bedrock Authentication
-
-Add to your `.env` file:
-
-```bash
-CLAUDE_CODE_USE_BEDROCK=1
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your-access-key-id
-AWS_SECRET_ACCESS_KEY=your-secret-access-key
-```
-
-**Benefits:**
-- No Anthropic API key required
-- Use existing AWS infrastructure
-- Consolidated billing through AWS
-- OAuth login automatically hidden in UI
-
-**Note:** When using Bedrock, the UI will detect it automatically and hide the OAuth login interface since authentication is handled via AWS credentials.
-
-## Cloudflare Tunnel Configuration
-
-Enable secure remote access to your Claude Code UI instance without exposing ports.
-
-### Setup Cloudflare Tunnel
-
-1. **Create Cloudflare Tunnel:**
-   - Visit [Cloudflare Zero Trust Dashboard](https://one.dash.cloudflare.com/)
-   - Create a new tunnel and get credentials
-
-2. **Configure credentials:**
-   ```bash
-   # Copy example file
-   cp cloudflared/credentials.json.example cloudflared/credentials.json
-
-   # Edit with your tunnel credentials
-   nano cloudflared/credentials.json
-   ```
-
-3. **Update config:**
-   ```yaml
-   # cloudflared/config.yml
-   tunnel: your-tunnel-id
-   credentials-file: /etc/cloudflared/credentials.json
-
-   ingress:
-     - hostname: your-domain.com
-       service: http://claude-code-ui:3001
-     - service: http_status:404
-   ```
-
-4. **Deploy with Docker Compose:**
-   ```bash
-   docker-compose up -d
-   ```
-
-**Benefits:**
-- Secure access from anywhere
-- No port forwarding or firewall configuration
-- HTTPS by default
-- DDoS protection included
-
-**GitHub Actions Integration:** The CI/CD workflow automatically sets up Cloudflare Tunnel using `CLOUDFLARED_CREDENTIALS` secret.
-
-## Usage Guide
-
-### Core Features
-
-#### Project Management
-- **Auto-discovery** - Automatically discovers Claude Code, Cursor or Codex sessions and groups them into projects with session counts
-- **Project Actions** - Rename, delete, and organize projects
-- **Smart Navigation** - Quick access to recent projects and sessions
-- **MCP support** - Add your own MCP servers through the UI 
-
-#### Chat Interface
-- **Use responsive chat or Claude Code/Cursor CLI/Codex CLI** - You can either use the adapted chat interface or use the shell button to connect to your selected CLI. 
-- **Real-time Communication** - Stream responses from your selected CLI (Claude Code/Cursor/Codex) with WebSocket connection
-- **Session Management** - Resume previous conversations or start fresh sessions
-- **Message History** - Complete conversation history with timestamps and metadata
-- **Multi-format Support** - Text, code blocks, and file references
-
-#### File Explorer & Editor
-- **Interactive File Tree** - Browse project structure with expand/collapse navigation
-- **Live File Editing** - Read, modify, and save files directly in the interface
-- **Syntax Highlighting** - Support for multiple programming languages
-- **File Operations** - Create, rename, delete files and directories
-
-#### Git Explorer
-- **Branch Management** - View, create, and switch between branches
-- **Change Tracking** - Stage, unstage, and review file changes
-- **Commit Interface** - Create commits with messages directly from the UI
-
-#### TaskMaster AI Integration *(Optional)*
-- **Visual Task Board** - Kanban-style interface for managing development tasks
-- **PRD Parser** - Create Product Requirements Documents and parse them into structured tasks
-- **Progress Tracking** - Real-time status updates and completion tracking
-
-#### Session Management
-- **Session Persistence** - All conversations automatically saved
-- **Session Organization** - Group sessions by project and timestamp
-- **Session Actions** - Rename, delete, and export conversation history
-- **Cross-device Sync** - Access sessions from any device
-
-### Mobile App
-- **Responsive Design** - Optimized for all screen sizes
-- **Touch-friendly Interface** - Swipe gestures and touch navigation
-- **Mobile Navigation** - Bottom tab bar for easy thumb navigation
-- **Adaptive Layout** - Collapsible sidebar and smart content prioritization
-- **Add shortcut to Home Screen** - Add a shortcut to your home screen and the app will behave like a PWA
-
-## Architecture
-
-### System Overview
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │  Agent     │
-│   (React/Vite)  │◄──►│ (Express/WS)    │◄──►│  Integration    │
-│                 │    │                 │    │                │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
-
-### Backend (Node.js + Express)
-- **Express Server** - RESTful API with static file serving
-- **WebSocket Server** - Communication for chats and project refresh
-- **Agent Integration (Claude Code / Cursor CLI / Codex)** - Process spawning and management
-- **File System API** - Exposing file browser for projects
-
-### Frontend (React + Vite)
-- **React 18** - Modern component architecture with hooks
-- **CodeMirror** - Advanced code editor with syntax highlighting
-
-
-
-
-
-### Contributing
-
-We welcome contributions! Please follow these guidelines:
-
-#### Getting Started
-1. **Fork** the repository
-2. **Clone** your fork: `git clone <your-fork-url>`
-3. **Install** dependencies: `npm install`
-4. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-
-#### Development Process
-1. **Make your changes** following the existing code style
-2. **Test thoroughly** - ensure all features work correctly
-3. **Run quality checks**: `npm run lint && npm run format`
-4. **Commit** with descriptive messages following [Conventional Commits](https://conventionalcommits.org/)
-5. **Push** to your branch: `git push origin feature/amazing-feature`
-6. **Submit** a Pull Request with:
-   - Clear description of changes
-   - Screenshots for UI changes
-   - Test results if applicable
-
-#### What to Contribute
-- **Bug fixes** - Help us improve stability
-- **New features** - Enhance functionality (discuss in issues first)
-- **Documentation** - Improve guides and API docs
-- **UI/UX improvements** - Better user experience
-- **Performance optimizations** - Make it faster
-
-## Troubleshooting
-
-### Common Issues & Solutions
-
-
-#### "No Claude projects found"
-**Problem**: The UI shows no projects or empty project list
-**Solutions**:
-- Ensure [Claude Code](https://docs.anthropic.com/en/docs/claude-code) is properly installed
-- Run `claude` command in at least one project directory to initialize
-- Verify `~/.claude/projects/` directory exists and has proper permissions
-
-#### File Explorer Issues
-**Problem**: Files not loading, permission errors, empty directories
-**Solutions**:
-- Check project directory permissions (`ls -la` in terminal)
-- Verify the project path exists and is accessible
-- Review server console logs for detailed error messages
-- Ensure you're not trying to access system directories outside project scope
-
+Open http://localhost:3001 (production) or http://localhost:5173 (development).
+
+## Documentation
+
+- **[Full Documentation](https://flopsstuff.github.io/ccui/)** — Setup guides, configuration, API reference
+- **[Getting Started](docs/getting-started.md)** — Detailed installation instructions
+- **[Docker Setup](docs/docker.md)** — Container deployment guide
+- **[Configuration](docs/configuration.md)** — Environment variables reference
+- **[Architecture](docs/architecture.md)** — System design overview
+
+## Links
+
+| Resource | Link |
+|----------|------|
+| This repository | [github.com/Flopsstuff/ccui](https://github.com/Flopsstuff/ccui) |
+| Original repository | [github.com/siteboon/claudecodeui](https://github.com/siteboon/claudecodeui) |
+| npm package | [@siteboon/claude-code-ui](https://www.npmjs.com/package/@siteboon/claude-code-ui) |
+| Documentation | [flopsstuff.github.io/ccui](https://flopsstuff.github.io/ccui/) |
 
 ## License
 
-GNU General Public License v3.0 - see [LICENSE](LICENSE) file for details.
+GPL-3.0 — see [LICENSE](LICENSE) for details.
 
-This project is open source and free to use, modify, and distribute under the GPL v3 license.
-
-## Additional Documentation
-
-- **[Documentation](https://flopsstuff.github.io/ccui/)** - Full project documentation
-- **[CLAUDE.md](CLAUDE.md)** - Comprehensive project architecture and development guide for Claude Code
-- **[WARP.md](WARP.md)** - Development commands and architecture reference for Warp terminal
-- **[Docker Setup](docs/docker.md)** - Complete Docker setup and deployment guide
-
-## Acknowledgments
-
-### Built With
-- **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** - Anthropic's official CLI
-- **[Cursor CLI](https://docs.cursor.com/en/cli/overview)** - Cursor's official CLI
-- **[Codex](https://developers.openai.com/codex)** - OpenAI Codex
-- **[React](https://react.dev/)** - User interface library
-- **[Vite](https://vitejs.dev/)** - Fast build tool and dev server
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[CodeMirror](https://codemirror.net/)** - Advanced code editor
-- **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** *(Optional)* - AI-powered project management and task planning
-- **[Cloudflare Tunnel](https://www.cloudflare.com/products/tunnel/)** - Secure remote access
-
-## Support & Community
-
-### Stay Updated
-- **Star** this repository to show support
-- **Watch** for updates and new releases
-- **Follow** the project for announcements
-
-### Sponsors
-- [Siteboon - AI powered website builder](https://siteboon.ai)
 ---
 
 <div align="center">
-  <strong>Made with care for the Claude Code, Cursor and Codex community.</strong>
+  <sub>Based on <a href="https://github.com/siteboon/claudecodeui">siteboon/claudecodeui</a></sub>
 </div>
