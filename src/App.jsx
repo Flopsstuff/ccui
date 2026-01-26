@@ -998,7 +998,7 @@ function App() {
             <TasksSettingsProvider>
               <TaskMasterProvider>
                 <ProtectedRoute>
-                  <Router>
+                  <Router basename={window.__ROUTER_BASENAME__ || ''}>                                                                                                      
                     <Routes>
                       <Route path="/" element={<AppContent />} />
                       <Route path="/session/:sessionId" element={<AppContent />} />
