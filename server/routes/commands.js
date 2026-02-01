@@ -126,6 +126,12 @@ const builtInCommands = [
     description: 'Rewind the conversation to a previous state',
     namespace: 'builtin',
     metadata: { type: 'builtin' }
+  },
+  {
+    name: '/commit',
+    description: 'Commit all changes and push to remote',
+    namespace: 'builtin',
+    metadata: { type: 'builtin' }
   }
 ];
 
@@ -314,6 +320,36 @@ Custom commands can be created in:
       data: {
         steps,
         message: `Rewinding conversation by ${steps} step${steps > 1 ? 's' : ''}...`
+      }
+    };
+  },
+
+  '/commit': async (args, context) => {
+    const projectPath = context?.projectPath;
+
+    if (!projectPath) {
+      return {
+        type: 'builtin',
+        action: 'commit',
+        data: {
+          error: 'No project selected',
+          message: 'Please select a project to commit changes'
+        }
+      };
+    }
+
+    // Join args as commit message, or use default
+    const commitMessage = args.length > 0 ? args.join(' ') : null;
+
+    return {
+      type: 'builtin',
+      action: 'commit',
+      data: {
+        projectPath,
+        commitMessage,
+        message: commitMessage
+          ? `Committing with message: "${commitMessage}"`
+          : 'Opening commit dialog...'
       }
     };
   }
