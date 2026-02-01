@@ -602,7 +602,8 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           authenticated: data.authenticated,
           email: data.email,
           loading: false,
-          error: data.error || null
+          error: data.error || null,
+          isBedrock: data.isBedrock || false
         });
       } else {
         setClaudeAuthStatus({
@@ -1043,7 +1044,9 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           </div>
           <button
             onClick={toggleDarkMode}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+              isDarkMode ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
             role="switch"
             aria-checked={isDarkMode}
             aria-label="Toggle dark mode"
@@ -1111,7 +1114,9 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           </div>
           <button
             onClick={() => setCodeEditorTheme(codeEditorTheme === 'dark' ? 'light' : 'dark')}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+              codeEditorTheme === 'dark' ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
             role="switch"
             aria-checked={codeEditorTheme === 'dark'}
             aria-label="Toggle editor theme"
@@ -1145,7 +1150,9 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           </div>
           <button
             onClick={() => setCodeEditorWordWrap(!codeEditorWordWrap)}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+              codeEditorWordWrap ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
             role="switch"
             aria-checked={codeEditorWordWrap}
             aria-label="Toggle word wrap"
@@ -1173,7 +1180,9 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           </div>
           <button
             onClick={() => setCodeEditorShowMinimap(!codeEditorShowMinimap)}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+              codeEditorShowMinimap ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
             role="switch"
             aria-checked={codeEditorShowMinimap}
             aria-label="Toggle minimap"
@@ -1201,7 +1210,9 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }) {
           </div>
           <button
             onClick={() => setCodeEditorLineNumbers(!codeEditorLineNumbers)}
-            className="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+              codeEditorLineNumbers ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
             role="switch"
             aria-checked={codeEditorLineNumbers}
             aria-label="Toggle line numbers"

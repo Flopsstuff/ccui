@@ -100,7 +100,7 @@ const LoginForm = () => {
 
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              Enter your credentials to access Claude Code UI
+              Enter your credentials to access AI Code UI
             </p>
           </div>
         </div>
