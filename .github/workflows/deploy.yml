@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        env:
+          ENV_CONTENT: ${{ secrets.ENV_FILE }}
+        run: printf '%s\n' "$ENV_CONTENT" > .env
+
+      - name: Create cloudflared credentials
+        env:
+          CREDS_CONTENT: ${{ secrets.CLOUDFLARED_CREDENTIALS }}
+        run: |
+          mkdir -p cloudflared
+          printf '%s\n' "$CREDS_CONTENT" > cloudflared/credentials.json
+
+      - name: Stop existing containers
+        run: docker compose down --remove-orphans || true
+
+      - name: Build containers
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"--no-cache"* ]]; then
+            echo "Building without cache (triggered by commit message)"
+            docker compose build --no-cache
+          else
+            echo "Building with cache"
+            docker compose build
+          fi
+
+      - name: Start containers
+        run: docker compose up -d
+
+      - name: Cleanup old images
+        run: docker image prune -f || true
