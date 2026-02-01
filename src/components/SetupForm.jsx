@@ -48,7 +48,7 @@ const SetupForm = () => {
             <div className="flex justify-center mb-4">
               <img src="/logo.svg" alt="CloudCLI" className="w-16 h-16" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">Welcome to Claude Code UI</h1>
+            <h1 className="text-2xl font-bold text-foreground">Welcome to AI Code UI</h1>
             <p className="text-muted-foreground mt-2">
               Set up your account to get started
             </p>
