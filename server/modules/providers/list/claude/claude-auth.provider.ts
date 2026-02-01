@@ -73,9 +73,70 @@ export class ClaudeProviderAuth implements IProviderAuth {
   }
 
   /**
+   * Asks the Claude CLI directly via `claude auth status --json`. This is the
+   * source of truth — it correctly handles the macOS Keychain (where the CLI
+   * stores OAuth tokens on Mac instead of ~/.claude/.credentials.json),
+   * Bedrock/Vertex providers, and any future auth scheme the CLI adds.
+   * Returns null if the CLI is too old to support the command or the call fails.
+   */
+  private askCliAuthStatus(): ClaudeCredentialsStatus | null {
+    const cliPath = process.env.CLAUDE_CLI_PATH || 'claude';
+    try {
+      const result = spawn.sync(cliPath, ['auth', 'status', '--json'], {
+        timeout: 5000,
+        encoding: 'utf8',
+        shell: true,
+      });
+      if (result.status !== 0 || typeof result.stdout !== 'string' || !result.stdout.trim()) {
+        return null;
+      }
+
+      const parsed = readObjectRecord(JSON.parse(result.stdout));
+      if (!parsed) {
+        return null;
+      }
+
+      const loggedIn = parsed.loggedIn === true;
+      const email = readOptionalString(parsed.email) ?? null;
+      const apiProvider = readOptionalString(parsed.apiProvider);
+      const authMethod = readOptionalString(parsed.authMethod);
+
+      let method: string | null = null;
+      if (apiProvider && apiProvider !== 'firstParty') {
+        method = apiProvider;
+      } else if (authMethod === 'api_key') {
+        method = 'api_key';
+      } else if (authMethod) {
+        method = 'credentials_file';
+      }
+
+      if (loggedIn) {
+        return { authenticated: true, email: email ?? 'Authenticated', method };
+      }
+
+      return { authenticated: false, email, method, error: 'Not authenticated' };
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * Checks Claude credentials in the same priority order used by Claude Code.
    */
   private async checkCredentials(): Promise<ClaudeCredentialsStatus> {
+    // Priority 0: AWS Bedrock — no OAuth/credentials file required.
+    // The Claude Code CLI delegates auth to AWS when CLAUDE_CODE_USE_BEDROCK is set.
+    if (process.env.CLAUDE_CODE_USE_BEDROCK === '1' || process.env.CLAUDE_CODE_USE_BEDROCK === 'true') {
+      return { authenticated: true, email: 'AWS Bedrock', method: 'bedrock' };
+    }
+
+    // Priority 1: ask the CLI itself. This handles macOS Keychain storage
+    // and stays correct as Anthropic evolves their auth flow.
+    const cliStatus = this.askCliAuthStatus();
+    if (cliStatus) {
+      return cliStatus;
+    }
+
     if (process.env.ANTHROPIC_API_KEY?.trim()) {
       return { authenticated: true, email: 'API Key Auth', method: 'api_key' };
     }
