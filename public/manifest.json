@@ -1,7 +1,7 @@
 {
-  "name": "CloudCLI UI",
-  "short_name": "CloudCLI UI",
-  "description": "CloudCLI UI web application",
+  "name": "AI Code UI",
+  "short_name": "AI Code UI",
+  "description": "AI Code UI web application",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

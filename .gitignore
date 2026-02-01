@@ -106,7 +106,6 @@ temp/
 .cline/
 .windsurf/
 .serena/
-CLAUDE.md
 .mcp.json
 
 
@@ -134,5 +133,5 @@ dev-debug.log
 cloudflared/credentials.json
 
 # Task files
-tasks.json
-tasks/ 
+# tasks.json
+# tasks/ 

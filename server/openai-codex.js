@@ -218,6 +218,8 @@ export async function queryCodex(command, options = {}, ws) {
       model
     };
 
+    console.log('[Codex] Starting with options:', JSON.stringify(threadOptions, null, 2));
+
     // Start or resume thread
     if (sessionId) {
       thread = codex.resumeThread(sessionId, threadOptions);
