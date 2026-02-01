@@ -127,6 +127,12 @@ dev-debug.log
 *.sw?
 # OS specific
 
+# ignore gitpmoji directory
+.gitpmoji
+
+# Cloudflare tunnel credentials
+cloudflared/credentials.json
+
 # Task files
 tasks.json
 tasks/ 
