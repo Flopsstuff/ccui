@@ -1,49 +1,67 @@
 // Service Worker for Claude Code UI PWA
-const CACHE_NAME = 'claude-ui-v1';
+const CACHE_NAME = 'claude-ui-v3';
 const urlsToCache = [
   '/',
-  '/index.html',
   '/manifest.json'
 ];
 
-// Install event
+// Install event - skip waiting to activate immediately
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+      .then(cache => cache.addAll(urlsToCache))
   );
   self.skipWaiting();
 });
 
-// Fetch event
+// Fetch event - network first, fallback to cache
 self.addEventListener('fetch', event => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // For navigation requests (HTML), always try network first
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => caches.match('/'))
+    );
+    return;
+  }
+
+  // For other requests, try network first then cache
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
+        // Clone and cache successful responses
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
         }
-        // Otherwise fetch from network
-        return fetch(event.request);
-      }
-    )
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
 
-// Activate event
+// Activate event - clear old caches immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim();
     })
   );
 });
