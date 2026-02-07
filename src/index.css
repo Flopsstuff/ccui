@@ -51,8 +51,8 @@
     --safe-area-inset-left: env(safe-area-inset-left);
 
     /* Mobile navigation dimensions - Single source of truth */
-    --mobile-nav-height: 60px;
-    --mobile-nav-padding: 12px;
+    --mobile-nav-height: 44px;
+    --mobile-nav-padding: 8px;
     --mobile-nav-total: calc(var(--mobile-nav-height) + max(env(safe-area-inset-bottom, 0px), var(--mobile-nav-padding)));
 
     /* Header safe area dimensions */
@@ -116,10 +116,17 @@
   
   /* Root element with safe area padding for PWA */
   #root {
-    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: 100vh; /* fallback for older browsers */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+  }
+
+  @supports (min-height: 100dvh) {
+    #root {
+      min-height: 100dvh;
+    }
   }
   
   /* Apply safe area padding in standalone mode */
@@ -138,14 +145,24 @@
   body.pwa-mode {
     height: 100%;
     overflow: hidden;
+    overscroll-behavior: none;
   }
 
   body.pwa-mode #root {
     padding-top: var(--header-total-padding);
     padding-left: var(--safe-area-inset-left);
     padding-right: var(--safe-area-inset-right);
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  /* iOS PWA fix: 100dvh excludes top safe area in standalone mode.
+     Reduce mobile-nav-height to 0 so pb-mobile-nav shrinks, bringing content
+     closer to the nav (which is offset with negative bottom). */
+  body.ios-pwa {
+    --mobile-nav-height: 0px;
+    --mobile-nav-total: max(env(safe-area-inset-bottom, 0px), var(--mobile-nav-padding));
   }
 
   /* Adjust fixed inset positioning in PWA mode */
@@ -507,20 +524,20 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    
+
     /* Allow vertical scrolling in scroll containers */
     .overflow-y-auto, [data-scroll-container] {
       touch-action: pan-y;
       -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Preserve checkbox visibility */
     input[type="checkbox"] {
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
       opacity: 1 !important;
     }
-    
-    button, 
+
+    button,
     [role="button"],
     .clickable,
     a,
@@ -642,7 +659,12 @@
   
   /* Safe area support for iOS devices */
   .ios-bottom-safe {
-    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+    padding-bottom: max(env(safe-area-inset-bottom), 8px);
+  }
+
+  /* iOS PWA only: fixed bottom-0 is offset due to 100dvh viewport mismatch */
+  body.ios-pwa .ios-bottom-safe {
+    bottom: calc(-1 * env(safe-area-inset-top, 0px));
   }
   
   /* PWA specific header adjustments - uses CSS variables for consistency */
@@ -665,7 +687,7 @@
   
   @media screen and (max-width: 768px) {
     .chat-input-mobile {
-      padding-bottom: calc(60px + max(env(safe-area-inset-bottom), 12px));
+      padding-bottom: calc(var(--mobile-nav-height) + max(env(safe-area-inset-bottom), 8px));
     }
   }
 

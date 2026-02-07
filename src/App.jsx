@@ -106,9 +106,16 @@ function AppContent() {
       if (isStandalone) {
         document.documentElement.classList.add('pwa-mode');
         document.body.classList.add('pwa-mode');
+        // Detect iOS PWA specifically (iOS viewport has safe-area quirks)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        if (isIOS) {
+          document.body.classList.add('ios-pwa');
+        }
       } else {
         document.documentElement.classList.remove('pwa-mode');
         document.body.classList.remove('pwa-mode');
+        document.body.classList.remove('ios-pwa');
       }
     };
     

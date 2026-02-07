@@ -714,6 +714,12 @@ function Sidebar({
                 onClick={async () => {
                   setIsRefreshing(true);
                   try {
+                    // Clear all caches (Service Worker + browser cache)
+                    if ('caches' in window) {
+                      const cacheNames = await caches.keys();
+                      await Promise.all(cacheNames.map(name => caches.delete(name)));
+                      console.log('Cleared all caches');
+                    }
                     await onRefresh();
                   } finally {
                     setIsRefreshing(false);
@@ -755,6 +761,12 @@ function Sidebar({
               onClick={async () => {
                 setIsRefreshing(true);
                 try {
+                  // Clear all caches (Service Worker + browser cache)
+                  if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    console.log('Cleared all caches');
+                  }
                   await onRefresh();
                 } finally {
                   setIsRefreshing(false);
