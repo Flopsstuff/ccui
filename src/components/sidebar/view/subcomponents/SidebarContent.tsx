@@ -18,6 +18,7 @@ type SidebarContentProps = {
   isRefreshing: boolean;
   onCreateProject: () => void;
   onCollapseSidebar: () => void;
+  onNavigateHome?: () => void;
   updateAvailable: boolean;
   releaseInfo: ReleaseInfo | null;
   latestVersion: string | null;
@@ -39,6 +40,7 @@ export default function SidebarContent({
   isRefreshing,
   onCreateProject,
   onCollapseSidebar,
+  onNavigateHome,
   updateAvailable,
   releaseInfo,
   latestVersion,
@@ -64,6 +66,7 @@ export default function SidebarContent({
         isRefreshing={isRefreshing}
         onCreateProject={onCreateProject}
         onCollapseSidebar={onCollapseSidebar}
+        onNavigateHome={onNavigateHome}
         t={t}
       />
 

@@ -458,6 +458,10 @@ export function useProjectsState({
     [navigate, selectedProject?.name],
   );
 
+  const handleNavigateHome = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
+
   const sidebarSharedProps = useMemo(
     () => ({
       projects,
@@ -471,6 +475,7 @@ export function useProjectsState({
       isLoading: isLoadingProjects,
       loadingProgress,
       onRefresh: handleSidebarRefresh,
+      onNavigateHome: handleNavigateHome,
       onShowSettings: () => setShowSettings(true),
       showSettings,
       settingsInitialTab,
@@ -478,6 +483,7 @@ export function useProjectsState({
       isMobile,
     }),
     [
+      handleNavigateHome,
       handleNewSession,
       handleProjectDelete,
       handleProjectSelect,

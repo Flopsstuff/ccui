@@ -30,6 +30,7 @@ function Sidebar({
   isLoading,
   loadingProgress,
   onRefresh,
+  onNavigateHome,
   onShowSettings,
   showSettings,
   settingsInitialTab,
@@ -227,6 +228,7 @@ function Sidebar({
             isRefreshing={isRefreshing}
             onCreateProject={() => setShowNewProject(true)}
             onCollapseSidebar={handleCollapseSidebar}
+            onNavigateHome={onNavigateHome}
             updateAvailable={updateAvailable}
             releaseInfo={releaseInfo}
             latestVersion={latestVersion}
