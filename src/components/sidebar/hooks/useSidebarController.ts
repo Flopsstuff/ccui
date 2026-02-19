@@ -394,6 +394,11 @@ export function useSidebarController({
   const refreshProjects = useCallback(async () => {
     setIsRefreshing(true);
     try {
+      // Clear browser caches for fresh data
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      }
       await onRefresh();
     } finally {
       setIsRefreshing(false);

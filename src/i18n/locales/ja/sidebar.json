@@ -36,6 +36,7 @@
   },
   "tooltips": {
     "viewEnvironments": "環境を表示",
+    "navigateHome": "ホームページに移動",
     "hideSidebar": "サイドバーを隠す",
     "createProject": "新しいプロジェクトを作成",
     "refresh": "プロジェクトとセッションを更新 (Ctrl+R)",
