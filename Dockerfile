@@ -29,9 +29,15 @@ RUN ARCH=$(uname -m) && \
 # Install Claude CLI globally
 RUN npm install -g @anthropic-ai/claude-code
 
-# Install Cursor CLI and add to PATH
-ENV PATH="/root/.local/bin:${PATH}"
-RUN curl https://cursor.com/install -fsS | bash
+# Install Cursor CLI to /usr/local so /root can be mounted as a single named volume
+# without hiding the binary. The installer drops to /root/.local — move it out.
+RUN curl https://cursor.com/install -fsS | bash \
+    && mv /root/.local/bin/* /usr/local/bin/ 2>/dev/null || true \
+    && if [ -d /root/.local/share/cursor-agent ]; then \
+         mkdir -p /usr/local/share && \
+         mv /root/.local/share/cursor-agent /usr/local/share/cursor-agent; \
+       fi \
+    && rm -rf /root/.local
 
 # install codex cli
 RUN npm install -g @openai/codex
@@ -67,8 +73,10 @@ COPY . .
 # Build frontend
 RUN npm run build
 
-# Create directories for sessions and projects
-RUN mkdir -p /root/.claude/projects /root/.cursor /root/.codex /projects
+# Create projects mount target. /root/.{claude,codex,cursor,gemini,cloudcli} are
+# created on first run by each CLI / the server itself, and persist via the
+# home-data volume mounted at /root.
+RUN mkdir -p /projects
 
 # Expose port
 EXPOSE 3001

@@ -4,17 +4,8 @@ services:
     ports:
       - "3007:3001"
     volumes:
-      # Claude sessions (persistent)
-      - claude-sessions:/root/.claude
-
-      # Cursor sessions (persistent)
-      - cursor-sessions:/root/.cursor
-
-      # Cursor config/auth (persistent)
-      - cursor-config:/root/.config/cursor
-
-      # Codex sessions (persistent)
-      - codex-sessions:/root/.codex
+      # All CLI auth/config/sessions + CCUI database (~/.cloudcli/auth.db) under one volume
+      - home-data:/root
 
       # Projects (all projects inside container) — mount path follows WORKSPACES_ROOT
       - projects-data:${WORKSPACES_ROOT:-/projects}
@@ -25,8 +16,9 @@ services:
 
       # Restrict project creation to /projects only (override via .env if needed)
       - WORKSPACES_ROOT=${WORKSPACES_ROOT:-/projects}
-      # Database — default lives inside projects-data volume so it survives rebuilds
-      - DATABASE_PATH=${DATABASE_PATH:-/projects/.auth.db}
+      # DATABASE_PATH intentionally not defaulted: server falls back to
+      # ~/.cloudcli/auth.db = /root/.cloudcli/auth.db, persisted via home-data.
+      - DATABASE_PATH=${DATABASE_PATH}
 
       # Claude CLI
       - CLAUDE_CLI_PATH=${CLAUDE_CLI_PATH:-/usr/local/bin/claude}
@@ -73,8 +65,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  claude-sessions:
-  cursor-sessions:
-  cursor-config:
-  codex-sessions:
+  home-data:
   projects-data:
