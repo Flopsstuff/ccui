@@ -3,7 +3,8 @@ FROM node:20-slim
 # Prevent apt from asking interactive questions
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies for node-pty, Claude CLI and AWS CLI
+# Install build deps (node-pty, AWS CLI install) plus a small set of
+# shell utilities so the terminal plugin gives a usable interactive shell.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     make \
@@ -12,6 +13,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     unzip \
     ca-certificates \
+    iputils-ping \
+    dnsutils \
+    netcat-openbsd \
+    iproute2 \
+    procps \
+    less \
+    vim-tiny \
+    jq \
+    tree \
     && rm -rf /var/lib/apt/lists/*
 
 # Install AWS CLI v2 (for Bedrock) - detect architecture
