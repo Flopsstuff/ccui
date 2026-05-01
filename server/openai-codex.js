@@ -166,6 +166,22 @@ function transformCodexEvent(event) {
  * @returns {object} - { sandboxMode, approvalPolicy }
  */
 function mapPermissionModeToCodexOptions(permissionMode) {
+  // When running inside Docker, the Codex sandbox (bubblewrap) fails because
+  // the default seccomp profile blocks the unshare(CLONE_NEWUSER) syscall.
+  // The container itself already isolates the workload, so an extra sandbox
+  // is redundant and just prevents Codex from running anything.
+  // Operators that DO have bwrap working can opt back in by unsetting the var.
+  const disableSandbox =
+    process.env.CODEX_DISABLE_SANDBOX === '1' ||
+    process.env.CODEX_DISABLE_SANDBOX === 'true';
+
+  if (disableSandbox) {
+    return {
+      sandboxMode: 'danger-full-access',
+      approvalPolicy: 'never',
+    };
+  }
+
   switch (permissionMode) {
     case 'acceptEdits':
       return {

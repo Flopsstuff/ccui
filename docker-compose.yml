@@ -38,6 +38,10 @@ services:
       # Auto-trust the workspace so non-interactive `gemini --prompt ...` does not bail
       - GEMINI_CLI_TRUST_WORKSPACE=${GEMINI_CLI_TRUST_WORKSPACE:-true}
 
+      # Codex sandbox: bubblewrap fails inside Docker (seccomp blocks user-ns
+      # creation). Disable it; the container provides isolation already.
+      - CODEX_DISABLE_SANDBOX=${CODEX_DISABLE_SANDBOX:-1}
+
       # GitHub CLI token — gh auto-detects GH_TOKEN, no `gh auth login` needed
       - GH_TOKEN=${GH_TOKEN}
 
