@@ -109,8 +109,12 @@ function runBuildIfNeeded(dir, packageJsonPath, onSuccess, onError) {
   const buildProcess = spawn('npm', ['run', 'build'], {
     cwd: dir,
     stdio: ['ignore', 'pipe', 'pipe'],
+    // tsc/vite/etc. write errors to stdout; force NODE_ENV away from
+    // production so dev-only build deps (e.g. typescript) stay available.
+    env: { ...process.env, NODE_ENV: 'development' },
   });
 
+  let stdout = '';
   let stderr = '';
   let settled = false;
 
@@ -122,6 +126,7 @@ function runBuildIfNeeded(dir, packageJsonPath, onSuccess, onError) {
     onError(new Error('npm run build timed out'));
   }, BUILD_TIMEOUT_MS);
 
+  buildProcess.stdout.on('data', (data) => { stdout += data.toString(); });
   buildProcess.stderr.on('data', (data) => { stderr += data.toString(); });
 
   buildProcess.on('close', (code) => {
@@ -129,7 +134,8 @@ function runBuildIfNeeded(dir, packageJsonPath, onSuccess, onError) {
     settled = true;
     clearTimeout(timer);
     if (code !== 0) {
-      return onError(new Error(`npm run build failed (exit code ${code}): ${stderr.trim()}`));
+      const output = [stdout.trim(), stderr.trim()].filter(Boolean).join('\n');
+      return onError(new Error(`npm run build failed (exit code ${code})${output ? ': ' + output : ''}`));
     }
     onSuccess();
   });
@@ -336,17 +342,28 @@ export function installPluginFromGit(url) {
 
       // Run npm install if package.json exists.
       // --ignore-scripts prevents postinstall hooks from executing arbitrary code.
+      // --include=dev + NODE_ENV=development is required because the server
+      // typically runs with NODE_ENV=production (Docker), and npm would
+      // otherwise skip devDependencies (typescript, vite, etc. — exactly
+      // what `npm run build` needs).
       const packageJsonPath = path.join(tempDir, 'package.json');
       if (fs.existsSync(packageJsonPath)) {
-        const npmProcess = spawn('npm', ['install', '--ignore-scripts'], {
+        let installStdout = '';
+        let installStderr = '';
+        const npmProcess = spawn('npm', ['install', '--ignore-scripts', '--include=dev'], {
           cwd: tempDir,
           stdio: ['ignore', 'pipe', 'pipe'],
+          env: { ...process.env, NODE_ENV: 'development' },
         });
+
+        npmProcess.stdout.on('data', (data) => { installStdout += data.toString(); });
+        npmProcess.stderr.on('data', (data) => { installStderr += data.toString(); });
 
         npmProcess.on('close', (npmCode) => {
           if (npmCode !== 0) {
             cleanupTemp();
-            return reject(new Error(`npm install for ${repoName} failed (exit code ${npmCode})`));
+            const output = [installStdout.trim(), installStderr.trim()].filter(Boolean).join('\n');
+            return reject(new Error(`npm install for ${repoName} failed (exit code ${npmCode})${output ? ': ' + output : ''}`));
           }
           runBuildIfNeeded(tempDir, packageJsonPath, () => finalize(manifest), (err) => { cleanupTemp(); reject(err); });
         });
@@ -402,16 +419,24 @@ export function updatePluginFromGit(name) {
         return reject(new Error(`Invalid manifest after update: ${validation.error}`));
       }
 
-      // Re-run npm install if package.json exists
+      // Re-run npm install if package.json exists. Same reasoning as the
+      // initial install in installPluginFromGit: include devDeps so the
+      // plugin's build script has its tooling available.
       const packageJsonPath = path.join(pluginDir, 'package.json');
       if (fs.existsSync(packageJsonPath)) {
-        const npmProcess = spawn('npm', ['install', '--ignore-scripts'], {
+        let updateStdout = '';
+        let updateStderr = '';
+        const npmProcess = spawn('npm', ['install', '--ignore-scripts', '--include=dev'], {
           cwd: pluginDir,
           stdio: ['ignore', 'pipe', 'pipe'],
+          env: { ...process.env, NODE_ENV: 'development' },
         });
+        npmProcess.stdout.on('data', (data) => { updateStdout += data.toString(); });
+        npmProcess.stderr.on('data', (data) => { updateStderr += data.toString(); });
         npmProcess.on('close', (npmCode) => {
           if (npmCode !== 0) {
-            return reject(new Error(`npm install for ${name} failed (exit code ${npmCode})`));
+            const output = [updateStdout.trim(), updateStderr.trim()].filter(Boolean).join('\n');
+            return reject(new Error(`npm install for ${name} failed (exit code ${npmCode})${output ? ': ' + output : ''}`));
           }
           runBuildIfNeeded(pluginDir, packageJsonPath, () => resolve(manifest), (err) => reject(err));
         });
