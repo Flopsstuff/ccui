@@ -26,7 +26,7 @@ const getProviderCommand = ({
   }
 
   if (provider === 'claude') {
-    return 'claude --dangerously-skip-permissions /login';
+    return 'claude /login';
   }
 
   if (provider === 'cursor') {

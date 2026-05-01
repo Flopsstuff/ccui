@@ -1,0 +1,80 @@
+services:
+  claude-code-ui:
+    build: .
+    ports:
+      - "3007:3001"
+    volumes:
+      # Claude sessions (persistent)
+      - claude-sessions:/root/.claude
+
+      # Cursor sessions (persistent)
+      - cursor-sessions:/root/.cursor
+
+      # Cursor config/auth (persistent)
+      - cursor-config:/root/.config/cursor
+
+      # Codex sessions (persistent)
+      - codex-sessions:/root/.codex
+
+      # Projects (all projects inside container) — mount path follows WORKSPACES_ROOT
+      - projects-data:${WORKSPACES_ROOT:-/projects}
+    environment:
+      # Server
+      - PORT=${PORT:-3001}
+      - NODE_ENV=production
+
+      # Restrict project creation to /projects only (override via .env if needed)
+      - WORKSPACES_ROOT=${WORKSPACES_ROOT:-/projects}
+      # Database — default lives inside projects-data volume so it survives rebuilds
+      - DATABASE_PATH=${DATABASE_PATH:-/projects/.auth.db}
+
+      # Claude CLI
+      - CLAUDE_CLI_PATH=${CLAUDE_CLI_PATH:-/usr/local/bin/claude}
+
+      - CONTEXT_WINDOW=${CONTEXT_WINDOW:-160000}
+
+      # AWS Bedrock
+      - CLAUDE_CODE_USE_BEDROCK=${CLAUDE_CODE_USE_BEDROCK}
+      - AWS_REGION=${AWS_REGION:-eu-central-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      # Or use profile (mount ~/.aws)
+      # - AWS_PROFILE=${AWS_PROFILE:-default}
+
+      # Gemini API key — applied to gemini CLI config by docker-entrypoint.sh
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # Auto-trust the workspace so non-interactive `gemini --prompt ...` does not bail
+      - GEMINI_CLI_TRUST_WORKSPACE=${GEMINI_CLI_TRUST_WORKSPACE:-true}
+
+      # GitHub CLI token — gh auto-detects GH_TOKEN, no `gh auth login` needed
+      - GH_TOKEN=${GH_TOKEN}
+
+      # Anthropic Models
+      - ANTHROPIC_DEFAULT_SONNET_MODEL=${ANTHROPIC_DEFAULT_SONNET_MODEL}
+      - ANTHROPIC_DEFAULT_OPUS_MODEL=${ANTHROPIC_DEFAULT_OPUS_MODEL}
+      - ANTHROPIC_DEFAULT_HAIKU_MODEL=${ANTHROPIC_DEFAULT_HAIKU_MODEL}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL}
+      - ANTHROPIC_SMALL_FAST_MODEL=${ANTHROPIC_SMALL_FAST_MODEL}
+
+    # Optional: mount AWS credentials from host
+    # volumes:
+    #   - ~/.aws:/root/.aws:ro
+
+    restart: unless-stopped
+
+  # Cloudflare Tunnel for external access
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro
+    depends_on:
+      - claude-code-ui
+    restart: unless-stopped
+
+volumes:
+  claude-sessions:
+  cursor-sessions:
+  cursor-config:
+  codex-sessions:
+  projects-data:

@@ -172,7 +172,13 @@ async function spawnGemini(command, options = {}, ws) {
         const geminiProcess = spawnFunction(spawnCmd, spawnArgs, {
             cwd: workingDir,
             stdio: ['pipe', 'pipe', 'pipe'],
-            env: { ...process.env } // Inherit all environment variables
+            env: {
+                // Inherit all environment variables, then auto-trust the workspace.
+                // Gemini CLI bails on untrusted directories with --prompt unless
+                // this is set (alternative is --skip-trust, but env is harder to forget).
+                GEMINI_CLI_TRUST_WORKSPACE: 'true',
+                ...process.env,
+            },
         });
         let terminalNotificationSent = false;
         let terminalFailureReason = null;
