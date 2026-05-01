@@ -26,12 +26,16 @@ export function startPluginServer(name, pluginDir, serverEntry) {
 
     const serverPath = path.join(pluginDir, serverEntry);
 
-    // Restricted env — only essentials, no host secrets
+    // Pass the full server env to the plugin. CCUI is a single-user
+    // self-hosted setup and plugins are installed deliberately by URL — the
+    // user already trusts them with filesystem access (~/.claude/.credentials,
+    // /projects/*, the SQLite DB). Stripping env down to PATH/HOME left
+    // GH_TOKEN, GEMINI_API_KEY, AWS_* unavailable to plugins like
+    // cloudcli-plugin-terminal that legitimately need them.
     const pluginProcess = spawn('node', [serverPath], {
       cwd: pluginDir,
       env: {
-        PATH: process.env.PATH,
-        HOME: process.env.HOME,
+        ...process.env,
         NODE_ENV: process.env.NODE_ENV || 'production',
         PLUGIN_NAME: name,
       },
