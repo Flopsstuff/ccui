@@ -81,7 +81,7 @@ export default function QuickSettingsPanelView() {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm transition-opacity duration-150 ease-out"
+          className="fixed inset-0 z-30 bg-background/80 transition-opacity duration-150 ease-out"
           onClick={() => setIsOpen(false)}
         />
       )}

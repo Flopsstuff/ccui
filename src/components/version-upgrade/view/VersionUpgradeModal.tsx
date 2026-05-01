@@ -90,7 +90,7 @@ export function VersionUpgradeModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             {/* Backdrop */}
             <button
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+                className="fixed inset-0 bg-black/50"
                 onClick={onClose}
                 aria-label={t('versionUpdate.ariaLabels.closeModal')}
             />

@@ -149,7 +149,7 @@ function AppContentInner() {
             }`}
         >
           <button
-            className="fixed inset-0 bg-background/60 backdrop-blur-sm transition-opacity duration-150 ease-out"
+            className="fixed inset-0 bg-background/60 transition-opacity duration-150 ease-out"
             onClick={(event) => {
               event.stopPropagation();
               setSidebarOpen(false);

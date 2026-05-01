@@ -1,6 +1,7 @@
 <div align="center">
   <img src="public/logo.svg" alt="CloudCLI UI" width="64" height="64">
   <h1>Cloud CLI (aka Claude Code UI)</h1>
+  <p><strong>Fork of <a href="https://github.com/siteboon/claudecodeui">siteboon/claudecodeui</a> with Docker and AWS Bedrock support</strong></p>
   <p>A desktop and mobile UI for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>, <a href="https://docs.cursor.com/en/cli/overview">Cursor CLI</a>, <a href="https://developers.openai.com/codex">Codex</a>, and <a href="https://geminicli.com/">Gemini-CLI</a>.<br>Use it locally or remotely to view your active projects and sessions from everywhere.</p>
 </div>
 
@@ -14,6 +15,12 @@
   <br><br>
   <a href="https://trendshift.io/repositories/15586" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15586" alt="siteboon%2Fclaudecodeui | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
+
+**Key differences from original:**
+- Full Docker and Docker Compose support for easy self-hosted deployment
+- AWS Bedrock authentication support (use Claude without Anthropic API keys)
+- Cloudflare Tunnel integration for secure remote access
+- CI/CD pipeline for automated deployments
 
 <div align="right"><i><b>English</b> · <a href="./README.ru.md">Русский</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.tr.md">Türkçe</a></i></div>
 
@@ -131,6 +138,53 @@ CloudCLI UI is the open source UI layer that powers CloudCLI Cloud. You can self
 
 ---
 
+## Docker Installation (Recommended for Self-Hosting)
+
+The easiest way to self-host Claude Code UI with all features:
+
+```bash
+git clone https://github.com/Flopsstuff/ccui.git
+cd ccui
+cp .env.example .env
+# Edit .env with your settings (AWS credentials, etc.)
+docker-compose up --build
+```
+
+The server will be available at `http://localhost:3007`.
+
+**Features included in Docker setup:**
+- Claude Code, Cursor CLI, and Codex pre-installed
+- AWS CLI v2 for Bedrock support
+- Persistent volumes for sessions and projects
+- Optional Cloudflare Tunnel for secure remote access
+
+For AWS Bedrock configuration, see the `.env.example` file.
+
+---
+
+## AWS Bedrock Support
+
+This fork supports AWS Bedrock as an alternative to Anthropic API. This is useful for enterprise deployments or when you want to use AWS billing.
+
+### Configuration
+
+1. Set up AWS credentials (either via environment variables or AWS CLI profile)
+2. Enable Bedrock in `.env`:
+```bash
+CLAUDE_CODE_USE_BEDROCK=1
+AWS_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+```
+
+3. Optionally configure model IDs:
+```bash
+ANTHROPIC_MODEL=eu.anthropic.claude-sonnet-4-5-20250929-v1:0
+ANTHROPIC_SMALL_FAST_MODEL=eu.anthropic.claude-haiku-4-5-20251001-v1:0
+```
+
+When using Bedrock, the login button in settings will be hidden as authentication is handled via AWS credentials.
+
 ## Security & Tools Configuration
 
 **🔒 Important Notice**: All Claude Code tools are **disabled by default**. This prevents potentially harmful operations from running automatically.
@@ -242,6 +296,13 @@ CloudCLI UI  - (https://cloudcli.ai).
 - **[CodeMirror](https://codemirror.net/)** - Advanced code editor
 - **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** *(Optional)* - AI-powered project management and task planning
 
+## Links
+
+| Resource | Link |
+|----------|------|
+| This fork | [github.com/Flopsstuff/ccui](https://github.com/Flopsstuff/ccui) |
+| Original repository | [github.com/siteboon/claudecodeui](https://github.com/siteboon/claudecodeui) |
+| npm package | [@siteboon/claude-code-ui](https://www.npmjs.com/package/@siteboon/claude-code-ui) |
 
 ### Sponsors
 - [Siteboon - AI powered website builder](https://siteboon.ai)
@@ -249,4 +310,6 @@ CloudCLI UI  - (https://cloudcli.ai).
 
 <div align="center">
   <strong>Made with care for the Claude Code, Cursor and Codex community.</strong>
+  <br>
+  <sub>Based on <a href="https://github.com/siteboon/claudecodeui">siteboon/claudecodeui</a></sub>
 </div>

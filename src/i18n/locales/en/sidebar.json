@@ -36,6 +36,7 @@
   },
   "tooltips": {
     "viewEnvironments": "View Environments",
+    "navigateHome": "Go to home page",
     "hideSidebar": "Hide sidebar",
     "createProject": "Create new project",
     "refresh": "Refresh projects and sessions (Ctrl+R)",

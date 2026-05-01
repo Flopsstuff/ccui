@@ -24,6 +24,7 @@ type SidebarHeaderProps = {
   isRefreshing: boolean;
   onCreateProject: () => void;
   onCollapseSidebar: () => void;
+  onNavigateHome?: () => void;
   t: TFunction;
 };
 
@@ -41,6 +42,7 @@ export default function SidebarHeader({
   isRefreshing,
   onCreateProject,
   onCollapseSidebar,
+  onNavigateHome,
   t,
 }: SidebarHeaderProps) {
   const LogoBlock = () => (
@@ -71,7 +73,13 @@ export default function SidebarHeader({
               <LogoBlock />
             </a>
           ) : (
-            <LogoBlock />
+            <button
+              onClick={onNavigateHome}
+              className="flex items-center gap-2.5 min-w-0 hover:opacity-80 transition-opacity cursor-pointer bg-transparent border-0 p-0"
+              title={t('tooltips.navigateHome')}
+            >
+              <LogoBlock />
+            </button>
           )}
 
           <div className="flex flex-shrink-0 items-center gap-0.5">
@@ -194,7 +202,13 @@ export default function SidebarHeader({
               <LogoBlock />
             </a>
           ) : (
-            <LogoBlock />
+            <button
+              onClick={onNavigateHome}
+              className="flex items-center gap-2.5 active:opacity-70 transition-opacity min-w-0 cursor-pointer bg-transparent border-0 p-0"
+              title={t('tooltips.navigateHome')}
+            >
+              <LogoBlock />
+            </button>
           )}
 
           <div className="flex flex-shrink-0 gap-1.5">

@@ -107,7 +107,6 @@ temp/
 .cline/
 .windsurf/
 .serena/
-CLAUDE.md
 .mcp.json
 .gemini/
 
@@ -136,7 +135,7 @@ cloudflared/credentials.json
 
 # Task files
 tasks.json
-tasks/ 
+tasks/
 
 # Translations
 !src/i18n/locales/en/tasks.json

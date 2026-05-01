@@ -49,7 +49,7 @@ export default function ShellMinimalView({
       />
 
       {showMobileAuthPanel && (
-        <div className="absolute inset-x-0 bottom-14 z-20 border-t border-gray-700/80 bg-gray-900/95 p-3 backdrop-blur-sm md:hidden">
+        <div className="absolute inset-x-0 bottom-14 z-20 border-t border-gray-700/80 bg-gray-900/95 p-3 md:hidden">
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-2">
               <p className="text-xs text-gray-300">Open or copy the login URL:</p>
@@ -102,7 +102,7 @@ export default function ShellMinimalView({
           <button
             type="button"
             onClick={() => setIsAuthPanelHidden(false)}
-            className="rounded bg-gray-800/95 px-3 py-2 text-xs font-medium text-gray-100 shadow-lg backdrop-blur-sm hover:bg-gray-700"
+            className="rounded bg-gray-800/95 px-3 py-2 text-xs font-medium text-gray-100 shadow-lg hover:bg-gray-700"
           >
             Show login URL
           </button>

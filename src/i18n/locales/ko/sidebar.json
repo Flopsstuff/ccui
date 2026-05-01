@@ -36,6 +36,7 @@
   },
   "tooltips": {
     "viewEnvironments": "환경 보기",
+    "navigateHome": "홈페이지로 이동",
     "hideSidebar": "사이드바 숨기기",
     "createProject": "새 프로젝트 생성",
     "refresh": "프로젝트 및 세션 새로고침 (Ctrl+R)",

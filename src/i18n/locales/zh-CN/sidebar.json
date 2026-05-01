@@ -36,6 +36,7 @@
   },
   "tooltips": {
     "viewEnvironments": "查看环境",
+    "navigateHome": "返回首页",
     "hideSidebar": "隐藏侧边栏",
     "createProject": "创建新项目",
     "refresh": "刷新项目和会话 (Ctrl+R)",
