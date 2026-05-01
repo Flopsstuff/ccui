@@ -29,14 +29,18 @@ RUN ARCH=$(uname -m) && \
 # Install Claude CLI globally
 RUN npm install -g @anthropic-ai/claude-code
 
-# Install Cursor CLI to /usr/local so /root can be mounted as a single named volume
-# without hiding the binary. The installer drops to /root/.local — move it out.
+# Install Cursor CLI to /usr/local so /root can be mounted as a single named
+# volume without hiding the binary. The installer:
+#   - extracts the package to /root/.local/share/cursor-agent/versions/<ver>/
+#   - creates symlinks /root/.local/bin/{agent,cursor-agent} -> the version dir
+# Move the whole share tree to /usr/local/share and recreate the symlinks
+# pointing at the new location, otherwise they end up dangling.
 RUN curl https://cursor.com/install -fsS | bash \
-    && mv /root/.local/bin/* /usr/local/bin/ 2>/dev/null || true \
-    && if [ -d /root/.local/share/cursor-agent ]; then \
-         mkdir -p /usr/local/share && \
-         mv /root/.local/share/cursor-agent /usr/local/share/cursor-agent; \
-       fi \
+    && mkdir -p /usr/local/share \
+    && mv /root/.local/share/cursor-agent /usr/local/share/cursor-agent \
+    && CURSOR_VERSION_DIR=$(find /usr/local/share/cursor-agent/versions -mindepth 1 -maxdepth 1 -type d | head -1) \
+    && ln -sf "$CURSOR_VERSION_DIR/cursor-agent" /usr/local/bin/cursor-agent \
+    && ln -sf "$CURSOR_VERSION_DIR/cursor-agent" /usr/local/bin/agent \
     && rm -rf /root/.local
 
 # install codex cli
